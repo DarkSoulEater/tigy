@@ -7,10 +7,11 @@ http://www.cs.columbia.edu/~sedwards/classes/2002/w4115/tiger.pdf
 <id> ::= <letter> | <id> (<digit> | <letter> | "_")
 <string-constant> ::= '"' {<char>} '"'
 <integer-constant> ::= <digit> | <integer-constant> <digit>
+<float-constant> ::= <integer-constant> "." <integer-constant>
 <punctuator> ::= "," | ":" | ";" | "(" | ")" | "[" | "]" | "{" | "}" | "."
                | "+" | "-" | "*" | "/" | "=" | "<>" | "<" | "<=" | ">" | ">="
                | "&" | "|" | ":="
-<type-id> ::= "int" | "string" | "user-defined-type"
+<type-id> ::= "int" | "string" | "float" | "user-defined-type"
 <keyword> ::= "array" | "break" | "do" | "else" | "end" | "for" | "function"
             | "if" | "in" | "let" | "nil" | "of" | "then" | "to" | "type"
             | "var" | "while"
@@ -18,6 +19,7 @@ http://www.cs.columbia.edu/~sedwards/classes/2002/w4115/tiger.pdf
 <program> ::= <expr>
 <expr> ::= <string-constant>
          | <integer-constant>
+         | <float-constant>
          | "nil"
          | <lvalue>
          | "-" <expr>
