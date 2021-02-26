@@ -66,6 +66,48 @@ struct token gettok(FILE *fp) {
                         return token;
                 }
 
+                case '"': {
+                        token.name = STRING;
+                        i = -1;
+                        while ((cur[++i] = getc(fp)) != '"') {
+                                if (i >= TOKENLEN) {
+                                        printf("Error: to many long str const\n");
+                                        exit(EXIT_FAILURE);
+                                }
+                                if (cur[i] == '\\') {
+                                        char tmp = getc(fp);
+                                        switch (tmp) {
+                                                case 'n': {
+                                                        cur[i] = '\n';
+                                                        break;
+                                                }
+
+                                                case 't': {
+                                                        cur[i] = '\t';
+                                                        break;
+                                                }
+
+                                                case '"': {
+                                                        cur[i] = '"';
+                                                        break;
+                                                }
+
+                                                case '\\': {
+                                                        cur[i] = '\\';
+                                                        break;
+                                                }
+
+                                                default: {
+                                                        printf("Error: expected escape sequences\n");
+                                                        exit(EXIT_FAILURE);
+                                                }
+                                        }
+                                }
+                        }
+                        cur[i] = '\0';
+                        return token;
+                }
+
                 case '0': case '1': case '2': case '3': case '4':
                 case '5': case '6': case '7': case '8': case '9': {
                         token.name = INT;
