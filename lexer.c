@@ -11,19 +11,20 @@ int is_keyword(const char *c) {
                  strcmp(c, "var") && strcmp(c, "while"));
 }
 
-struct token get_token(FILE *fp) {
+struct token gettok(FILE *fp) {
         struct token token;
-        char *cur = token.value;
+        char* cur = token.value;
+        int i = 0;
 
         label_skip:
-        while (isspace(*cur = getc(fp)))
+        while (isspace(cur[i] = getc(fp)))
                 ;
-        if (*cur == EOF) {
+        if (cur[i] == EOF) {
                 token.name = EMPTY;
-                *cur = '\0';
+                cur[i] = '\0';
                 return token;
         }
-        if (*cur == '/') {
+        if (cur[i] == '/') {
                 char cur = getc(fp), prev;
                 int comment_cnt = 1;
                 if(cur == '*') {
@@ -44,14 +45,14 @@ struct token get_token(FILE *fp) {
                 }
         }
 
-        switch (*cur) {
+        switch (cur[i]) {
                 case ':': case '<': case '>': {
                         token.name = PUNCTUATOR;
-                        if ((*++cur = getc(fp)) == '=') {
-                                *++cur = '\0';
+                        if ((cur[++i] = getc(fp)) == '=') {
+                                cur[++i] = '\0';
                         } else {
-                                if (*cur != EOF) ungetc(*cur, fp);
-                                *cur = '\0';
+                                if (cur[i] != EOF) ungetc(cur[i], fp);
+                                cur[i] = '\0';
                         }
                         return token;
                 }
@@ -61,32 +62,52 @@ struct token get_token(FILE *fp) {
                 case '.': case '+': case '-': case '*':
                 case '/': case '=': case '&': case '|': {
                         token.name = PUNCTUATOR;
-                        *++cur = '\0';
+                        cur[++i] = '\0';
                         return token;
                 }
 
                 case '0': case '1': case '2': case '3': case '4':
                 case '5': case '6': case '7': case '8': case '9': {
                         token.name = INT;
-                        while (isdigit(*++cur = getc(fp)));
-                        if (*cur == '.') {
-                                token.name = FLOAT;
-                                while (isdigit(*++cur = getc(fp)));
+                        while (isdigit(cur[++i] = getc(fp))) {
+                                if (i >= TOKENLEN) {
+                                        printf("Error: to many long int const\n");
+                                        exit(EXIT_FAILURE);
+                                }
                         }
-                        if (*cur != EOF) ungetc(*cur, fp);
-                        *cur = '\0';
-                        // if (*(c - 1) == '.') trow error;
+                        if (cur[i] == '.') {
+                                token.name = FLOAT;
+                                while (isdigit(cur[++i] = getc(fp))) {
+                                        if (i >= TOKENLEN) {
+                                                printf("Error: to many long int const\n");
+                                                exit(EXIT_FAILURE);
+                                        }
+                                }
+                        }
+                        if (cur[i] != EOF) ungetc(cur[i], fp);
+                        cur[i] = '\0';
+                        if (cur[i - 1] == '.') {
+                                printf("Error: fractional part missing\n");
+                                exit(EXIT_FAILURE);
+                        }
                         return token;
                 }
 
                 default: {
-                        while (isalpha(*cur) || *cur == '_' || isdigit(*cur)) {
-                                *++cur = getc(fp); // TODO: add limit to size;
+                        while (isalpha(cur[i]) || cur[i] == '_' || isdigit(cur[i])) {
+                                cur[++i] = getc(fp);
+                                if (i >= TOKENLEN) {
+                                        printf("Error: to many long id\n");
+                                        exit(EXIT_FAILURE);
+                                }
                         }
-                        if (*cur != EOF) ungetc(*cur, fp);
-                        *cur = '\0';
-                        token.name = (token.value[0] == '\0' ? EMPTY : (is_keyword(token.value) ? KEYWORD : ID));
-                        //token.name = (is_keyword(token.value) ? KEYWORD : ID);
+                        if (cur[i] != EOF) ungetc(cur[i], fp);
+                        if (i == 0) {
+                                printf("Error: unknow character %c\n", cur[i]);
+                                exit(EXIT_FAILURE);
+                        }
+                        cur[i] = '\0';
+                        token.name = (is_keyword(token.value) ? KEYWORD : ID);
                         return token;
                 }
         }

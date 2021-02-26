@@ -9,9 +9,7 @@
 
 struct token {
         enum { ID, KEYWORD, INT, FLOAT, STRING, PUNCTUATOR, EMPTY } name;
-        char value[TOKENLEN];
+        char value[TOKENLEN + 1];
 };
-
-struct token get_token(FILE *fp);
 
 #endif //TIGY_TOKEN_H
