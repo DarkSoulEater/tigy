@@ -47,6 +47,6 @@ http://www.cs.columbia.edu/~sedwards/classes/2002/w4115/tiger.pdf
 <type-declaration> ::= "type" <type-id> "=" <type>
 <variable-declaration> ::= "var" <id> [":" <type-id>] ":=" <expr>
 <function-declaration> ::= "function" <id> "(" [<type-fields>] ")"
-                         \ [":" <type-id>] "=" <expr>
+                           [":" <type-id>] "=" <expr>
 <type> ::= <type-id> | "{" [<type-fields>] "}" | "array" "of" <type-id>
 <type-fields> ::= <id> ":" <type-id> | <type-fields> "," <id> ":" <type-id>
