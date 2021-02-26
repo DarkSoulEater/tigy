@@ -27,7 +27,7 @@ http://www.cs.columbia.edu/~sedwards/classes/2002/w4115/tiger.pdf
          | <lvalue> ":=" <expr>
          | <id> "(" [<expr-list>] ")"
          | "(" [<expr-seq>] ")"
-         | <type-id> "{" [<field-list] "}"
+         | <type-id> "{" [<field-list>] "}"
          | <type-id> "[" <expr> "]" "of" <expr>
          | "if" <expr> "then" <expr> ["else" <expr>]
          | "while" <expr> "do" <expr>

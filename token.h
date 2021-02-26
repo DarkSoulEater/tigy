@@ -5,9 +5,11 @@
 #ifndef TIGY_TOKEN_H
 #define TIGY_TOKEN_H
 
+#define TOKENLEN 20
+
 struct token {
 	enum { ID, KEYWORD, INT, FLOAT, STRING, UNKNOWN } name;
-	char *value;
+	char value[TOKENLEN];
 };
 
 #endif //TIGY_TOKEN_H
