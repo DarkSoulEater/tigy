@@ -5,6 +5,6 @@
 #include <stdio.h>
 #include "token.h"
 
-struct token get_token(FILE *fp)
+struct token gettok(FILE *fp)
 {
 }

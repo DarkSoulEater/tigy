@@ -8,7 +8,7 @@
 #define TOKENLEN 20
 
 struct token {
-	enum { ID, KEYWORD, INT, FLOAT, STRING, UNKNOWN } name;
+	enum { ID, KEYWORD, INT, FLOAT, STRING, PUNCTUATOR, EMPTY } name;
 	char value[TOKENLEN];
 };
 
