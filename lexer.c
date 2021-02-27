@@ -33,7 +33,7 @@ struct token gettok(FILE *fp) {
                                 prev = cur;
                                 cur = getc(fp);
                                 if (cur == EOF) {
-                                        printf("Error: expected end of comment\n");
+                                        fputs("Error: expected end of comment\n", stderr);
                                         exit(EXIT_FAILURE);
                                 }
                                 if (cur == '*' && prev == '/') ++comment_cnt;
@@ -71,7 +71,7 @@ struct token gettok(FILE *fp) {
                         i = -1;
                         while ((cur[++i] = getc(fp)) != '"') {
                                 if (i >= TOKENLEN) {
-                                        printf("Error: to many long str const\n");
+                                        fputs("Error: to many long str const\n", stderr);
                                         exit(EXIT_FAILURE);
                                 }
                                 if (cur[i] == '\\') {
@@ -98,7 +98,7 @@ struct token gettok(FILE *fp) {
                                                 }
 
                                                 default: {
-                                                        printf("Error: expected escape sequences\n");
+                                                        fputs("Error: expected escape sequences\n", stderr);
                                                         exit(EXIT_FAILURE);
                                                 }
                                         }
@@ -113,7 +113,7 @@ struct token gettok(FILE *fp) {
                         token.name = INT;
                         while (isdigit(cur[++i] = getc(fp))) {
                                 if (i >= TOKENLEN) {
-                                        printf("Error: to many long int const\n");
+                                        fputs("Error: to many long int const\n", stderr);
                                         exit(EXIT_FAILURE);
                                 }
                         }
@@ -121,7 +121,7 @@ struct token gettok(FILE *fp) {
                                 token.name = FLOAT;
                                 while (isdigit(cur[++i] = getc(fp))) {
                                         if (i >= TOKENLEN) {
-                                                printf("Error: to many long int const\n");
+                                                fputs("Error: to many long int const\n", stderr);
                                                 exit(EXIT_FAILURE);
                                         }
                                 }
@@ -129,7 +129,7 @@ struct token gettok(FILE *fp) {
                         if (cur[i] != EOF) ungetc(cur[i], fp);
                         cur[i] = '\0';
                         if (cur[i - 1] == '.') {
-                                printf("Error: fractional part missing\n");
+                                fputs("Error: fractional part missing\n", stderr);
                                 exit(EXIT_FAILURE);
                         }
                         return token;
@@ -139,13 +139,13 @@ struct token gettok(FILE *fp) {
                         while (isalpha(cur[i]) || cur[i] == '_' || isdigit(cur[i])) {
                                 cur[++i] = getc(fp);
                                 if (i >= TOKENLEN) {
-                                        printf("Error: to many long id\n");
+                                        fputs("Error: to many long id\n", stderr);
                                         exit(EXIT_FAILURE);
                                 }
                         }
                         if (cur[i] != EOF) ungetc(cur[i], fp);
                         if (i == 0) {
-                                printf("Error: unknow character %c\n", cur[i]);
+                                fputs("Error: unknow character %c\n", stderr);
                                 exit(EXIT_FAILURE);
                         }
                         cur[i] = '\0';
