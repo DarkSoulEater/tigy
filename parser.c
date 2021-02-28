@@ -2,63 +2,65 @@
 // Created by Artyom Plevako on 25.02.2021.
 //
 
-#include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
+#include "diagnostics.h"
 #include "token.h"
 
-extern struct token gettok(FILE *);
+extern struct token gettoken(FILE *);
 
 static FILE *src;
 static struct token cur;
 
-static void expr();
-static void func_call();
-static void record_obj();
-static void array_obj();
-static void assign();
-static void lvalue();
-static void if_expr();
-static void while_expr();
-static void for_expr();
-static void let_expr();
-static void binary_op();
-static void expr_seq();
-static void expr_list();
-static void field_list();
-static void decl_list();
-static void type_decl();
-static void var_decl();
-static void func_decl();
-static void type_fields();
+static void expr       (void);
+static void func_call  (void);
+static void record_obj (void);
+static void array_obj  (void);
+static void assign     (void);
+static void lvalue     (void);
+static void if_expr    (void);
+static void while_expr (void);
+static void for_expr   (void);
+static void let_expr   (void);
+static void binary_expr(void);
+static void expr_seq   (void);
+static void expr_list  (void);
+static void field_list (void);
+static void decl_list  (void);
+static void type_decl  (void);
+static void var_decl   (void);
+static void func_decl  (void);
+static void type_fields(void);
+static void id         (void);
+static void typeid     (void);
+static void next       (const char *);
 
 void parsefile(FILE *fp)
 {
 	src = fp;
-	cur = gettok(src);
+	cur = gettoken(src);
 	expr();
-	if (cur.name != EMPTY) {
-		fputs("tigy: trailing code after program expression\n", stderr);
-		exit(EXIT_FAILURE);
-	}
+	if (cur.name != EMPTY)
+		error("expected", "end of file", cur.line, cur.col);
 }
 
 void expr()
 {
 	switch (cur.name) {
 	case ID:
-		cur = gettok(src);
-		if (!strcmp(cur.value, "(")) {
+		cur = gettoken(src);
+		if (strcmp(cur.value, "(") == 0)
 			func_call();
-		} else if (!strcmp(cur.value, "{")) {
+		else if (strcmp(cur.value, "{") == 0)
 			record_obj();
-		} else if (!strcmp(cur.value, "[")) {
+		else if (strcmp(cur.value, "[") == 0) {
 			array_obj();
-			if (strcmp(cur.value, "of")) {
+			if (strcmp(cur.value, "of") != 0) {
 				lvalue();
 				assign();
 			} else {
-				cur = gettok(src);
+				cur = gettoken(src);
 				expr();
 			}
 		} else {
@@ -67,113 +69,85 @@ void expr()
 		}
 		break;
 	case KEYWORD:
-		if (!strcmp(cur.value, "nil")) {
-			cur = gettok(src);
-		} else if (!strcmp(cur.value, "if")) {
+		if (strcmp(cur.value, "nil") == 0)
+			cur = gettoken(src);
+		else if (strcmp(cur.value, "if") == 0)
 			if_expr();
-		} else if (!strcmp(cur.value, "while")) {
+		else if (strcmp(cur.value, "while") == 0)
 			while_expr();
-		} else if (!strcmp(cur.value, "for")) {
+		else if (strcmp(cur.value, "for") == 0)
 			for_expr();
-		} else if (!strcmp(cur.value, "break")) {
-			cur = gettok(src);
-		} else if (!strcmp(cur.value, "let")) {
+		else if (strcmp(cur.value, "break") == 0)
+			cur = gettoken(src);
+		else if (strcmp(cur.value, "let") == 0)
 			let_expr();
-		} else {
-			fputs("tigy: invalid keyword in expression\n", stderr);
-			exit(EXIT_FAILURE);
-		}
+		else
+			error("expected", "expression", cur.line, cur.col);
 		break;
 	case INT:
 	case FLOAT:
-	case STRING:
-		cur = gettok(src);
+	case STR:
+		cur = gettoken(src);
 		break;
 	case PUNCTUATOR:
-		if (!strcmp(cur.value, "-")) {
-			cur = gettok(src);
+		if (strcmp(cur.value, "-") == 0) {
+			cur = gettoken(src);
 			expr();
-		} else if (!strcmp(cur.value, "(")) {
-			cur = gettok(src);
-			if (strcmp(cur.value, ")")) {
+		} else if (strcmp(cur.value, "(") == 0) {
+			cur = gettoken(src);
+			if (strcmp(cur.value, ")") != 0) {
 				expr_seq();
-				if (strcmp(cur.value, ")")) {
-					fputs("tigy: no closing bracket in "
-                                               "expression sequence\n", stderr);
-					exit(EXIT_FAILURE);
-				}
+				next(")");
 			} else {
-				cur = gettok(src);
+				cur = gettoken(src);
 			}
-		} else {
-			fputs("tigy: invalid punctuation in expression\n",
-			      stderr);
-			exit(EXIT_FAILURE);
-		}
+		} else
+			error("expected", "expression", cur.line, cur.col);
 		break;
 	case EMPTY:
-		fputs("tigy: incomplete program\n", stderr);
-		exit(EXIT_FAILURE);
+		error("expected", "expression", cur.line, cur.col);
+		break;
 	}
-	binary_op();
+	binary_expr();
 }
 
 void func_call()
 {
-	cur = gettok(src);
-	if (strcmp(cur.value, ")")) {
+	cur = gettoken(src);
+	if (strcmp(cur.value, ")") != 0)
 		expr_list();
-	}
-	if (strcmp(cur.value, ")")) {
-		fputs("tigy: no closing bracket in function call\n", stderr);
-		exit(EXIT_FAILURE);
-	}
-	cur = gettok(src);
+	next(")");
 }
 
 void record_obj()
 {
-	cur = gettok(src);
-	if (strcmp(cur.value, "}")) {
+	cur = gettoken(src);
+	if (strcmp(cur.value, "}") != 0)
 		field_list();
-	}
-	if (strcmp(cur.value, "}")) {
-		fputs("tigy: no closing bracket in record object\n", stderr);
-		exit(EXIT_FAILURE);
-	}
-	cur = gettok(src);
+	next("}");
 }
 
 void array_obj()
 {
-	cur = gettok(src);
+	cur = gettoken(src);
 	expr();
-	if (strcmp(cur.value, "]")) {
-		fputs("tigy: no closing bracket in array object\n", stderr);
-		exit(EXIT_FAILURE);
-	}
-	cur = gettok(src);
+	next("]");
 }
 
 void assign()
 {
-	if (!strcmp(cur.value, ":=")) {
-		cur = gettok(src);
+	if (strcmp(cur.value, ":=") == 0) {
+		cur = gettoken(src);
 		expr();
 	}
 }
 
 void lvalue()
 {
-	if (!strcmp(cur.value, ".")) {
-		cur = gettok(src);
-		if (cur.name != ID) {
-			fputs("tigy: no record member id in lvalue\n", stderr);
-			exit(EXIT_FAILURE);
-		}
-		cur = gettok(src);
+	if (strcmp(cur.value, ".") == 0) {
+		cur = gettoken(src);
 		lvalue();
-	} else if (!strcmp(cur.value, "[")) {
+	} else if (strcmp(cur.value, "[") == 0) {
 		array_obj();
 		lvalue();
 	}
@@ -181,92 +155,58 @@ void lvalue()
 
 void if_expr()
 {
-	cur = gettok(src);
+	cur = gettoken(src);
 	expr();
-	if (strcmp(cur.value, "then")) {
-		fputs("tigy: no then in if\n", stderr);
-		exit(EXIT_FAILURE);
-	}
-	cur = gettok(src);
+	next("then");
 	expr();
-	if (!strcmp(cur.value, "else")) {
-		cur = gettok(src);
+	if (strcmp(cur.value, "else") == 0) {
+		cur = gettoken(src);
 		expr();
 	}
 }
 
 void while_expr()
 {
-	cur = gettok(src);
+	cur = gettoken(src);
 	expr();
-	if (strcmp(cur.value, "do")) {
-		fputs("tigy: no do in while\n", stderr);
-		exit(EXIT_FAILURE);
-	}
-	cur = gettok(src);
+	next("do");
 	expr();
 }
 
 void for_expr()
 {
-	cur = gettok(src);
-	if (cur.name != ID) {
-		fputs("tigy: no id in for\n", stderr);
-		exit(EXIT_FAILURE);
-	}
-	cur = gettok(src);
-	if (strcmp(cur.value, ":=")) {
-		fputs("tigy: no assignment in for\n", stderr);
-		exit(EXIT_FAILURE);
-	}
-	cur = gettok(src);
+	cur = gettoken(src);
+	id();
+	next(":=");
 	expr();
-	if (strcmp(cur.value, "to")) {
-		fputs("tigy: no to in for\n", stderr);
-		exit(EXIT_FAILURE);
-	}
-	cur = gettok(src);
+	next("to");
 	expr();
-	if (strcmp(cur.value, "do")) {
-		fputs("tigy: no do in for\n", stderr);
-		exit(EXIT_FAILURE);
-	}
-	cur = gettok(src);
+	next("do");
 	expr();
 }
 
 void let_expr()
 {
-	cur = gettok(src);
-	if (!strcmp(cur.value, "in")) {
-		fputs("tigy: empty declaration list\n", stderr);
-		exit(EXIT_FAILURE);
-	}
+	cur = gettoken(src);
+	if (strcmp(cur.value, "in") == 0)
+		error("expected", "declaration list", cur.line, cur.col);
 	decl_list();
-	if (strcmp(cur.value, "in")) {
-		fputs("tigy: no \"in\" in let\n", stderr);
-		exit(EXIT_FAILURE);
-	}
-	cur = gettok(src);
-	if (strcmp(cur.value, "end")) {
+	next("in");
+	if (strcmp(cur.value, "end") != 0) {
 		expr_seq();
 	}
-	if (strcmp(cur.value, "end")) {
-		fputs("tigy: no \"end\" in let\n", stderr);
-		exit(EXIT_FAILURE);
-	}
-	cur = gettok(src);
+	next("end");
 }
 
-void binary_op()
+void binary_expr()
 {
-	if (!strcmp(cur.value, "&") || !strcmp(cur.value, "|") ||
-	    !strcmp(cur.value, ">=") || !strcmp(cur.value, "<=") ||
-	    !strcmp(cur.value, "<") || !strcmp(cur.value, ">") ||
-	    !strcmp(cur.value, "=") || !strcmp(cur.value, "<>") ||
-	    !strcmp(cur.value, "*") || !strcmp(cur.value, "/") ||
-	    !strcmp(cur.value, "+") || !strcmp(cur.value, "-")) {
-		cur = gettok(src);
+	if (strcmp(cur.value, "&") == 0 || strcmp(cur.value, "|") == 0 ||
+	    strcmp(cur.value, ">=") == 0 || strcmp(cur.value, "<=") == 0 ||
+	    strcmp(cur.value, "<") == 0 || strcmp(cur.value, ">") == 0 ||
+	    strcmp(cur.value, "=") == 0 || strcmp(cur.value, "<>") == 0 ||
+	    strcmp(cur.value, "*") == 0 || strcmp(cur.value, "/") == 0 ||
+	    strcmp(cur.value, "+") == 0 || strcmp(cur.value, "-") == 0) {
+		cur = gettoken(src);
 		expr();
 	}
 }
@@ -274,8 +214,8 @@ void binary_op()
 void expr_seq()
 {
 	expr();
-	while (!strcmp(cur.value, ";")) {
-		cur = gettok(src);
+	while (strcmp(cur.value, ";") == 0) {
+		cur = gettoken(src);
 		expr();
 	}
 }
@@ -283,50 +223,34 @@ void expr_seq()
 void expr_list()
 {
 	expr();
-	while (!strcmp(cur.value, ",")) {
-		cur = gettok(src);
+	while (strcmp(cur.value, ",") == 0) {
+		cur = gettoken(src);
 		expr();
 	}
 }
 
 void field_list()
 {
-	if (cur.name != ID) {
-		fputs("tigy: no id in field list\n", stderr);
-		exit(EXIT_FAILURE);
-	}
-	cur = gettok(src);
-	if (strcmp(cur.value, "=")) {
-		fputs("tigy: no = in field list\n", stderr);
-		exit(EXIT_FAILURE);
-	}
-	cur = gettok(src);
+	id();
+	next("=");
 	expr();
-	while (!strcmp(cur.value, ",")) {
-		cur = gettok(src);
-		if (cur.name != ID) {
-			fputs("tigy: no id in field list\n", stderr);
-			exit(EXIT_FAILURE);
-		}
-		cur = gettok(src);
-		if (strcmp(cur.value, "=")) {
-			fputs("tigy: no = in field list\n", stderr);
-			exit(EXIT_FAILURE);
-		}
-		cur = gettok(src);
+	while (strcmp(cur.value, ",") == 0) {
+		cur = gettoken(src);
+		id();
+		next("=");
 		expr();
 	}
 }
 
 void decl_list()
 {
-	if (!strcmp(cur.value, "type")) {
+	if (strcmp(cur.value, "type") == 0) {
 		type_decl();
 		decl_list();
-	} else if (!strcmp(cur.value, "var")) {
+	} else if (strcmp(cur.value, "var") == 0) {
 		var_decl();
 		decl_list();
-	} else if (!strcmp(cur.value, "function")) {
+	} else if (strcmp(cur.value, "function") == 0) {
 		func_decl();
 		decl_list();
 	} else
@@ -335,140 +259,84 @@ void decl_list()
 
 void type_decl()
 {
-	cur = gettok(src);
-	if (cur.name != ID) {
-		fputs("tigy: no type-id in type declaration\n", stderr);
-		exit(EXIT_FAILURE);
-	}
-	cur = gettok(src);
-	if (strcmp(cur.value, "=")) {
-		fputs("tigy: no = in type declaration\n", stderr);
-		exit(EXIT_FAILURE);
-	}
-	cur = gettok(src);
-	if (cur.name == ID) {
-		cur = gettok(src);
-	} else if (!strcmp(cur.value, "{")) {
-		cur = gettok(src);
-		if (strcmp(cur.value, "}")) {
+	cur = gettoken(src);
+	typeid();
+	next("=");
+	if (strcmp(cur.value, "{") == 0) {
+		cur = gettoken(src);
+		if (strcmp(cur.value, "}") != 0) {
 			type_fields();
-			if (strcmp(cur.value, "}")) {
-				fputs("tigy: no closing bracket in type "
-                                                       "declaration\n", stderr);
-				exit(EXIT_FAILURE);
-			}
-		}
-		cur = gettok(src);
-	} else if (!strcmp(cur.value, "array")) {
-		cur = gettok(src);
-		if (strcmp(cur.value, "of")) {
-			fputs("tigy: no of in type declaration\n", stderr);
-			exit(EXIT_FAILURE);
-		}
-		cur = gettok(src);
-		if (cur.name != ID) {
-			fputs("tigy: no type-id in type declaration\n", stderr);
-			exit(EXIT_FAILURE);
-		}
-		cur = gettok(src);
-	}
+			next("}");
+		} else
+			cur = gettoken(src);
+	} else if (strcmp(cur.value, "array") == 0) {
+		cur = gettoken(src);
+		next("of");
+		typeid();
+	} else
+		typeid();
 }
 
 void var_decl()
 {
-	cur = gettok(src);
-	if (cur.name != ID) {
-		fputs("tigy: no id in var declaration\n", stderr);
-		exit(EXIT_FAILURE);
+	cur = gettoken(src);
+	id();
+	if (strcmp(cur.value, ":") == 0) {
+		cur = gettoken(src);
+		typeid();
 	}
-	cur = gettok(src);
-	if (!strcmp(cur.value, ":")) {
-		cur = gettok(src);
-		if (cur.name != ID) {
-			fputs("tigy: no type-id in var declaration\n", stderr);
-			exit(EXIT_FAILURE);
-		}
-		cur = gettok(src);
-	}
-	if (strcmp(cur.value, ":=")) {
-		fputs("tigy: no := in var declaration\n", stderr);
-		exit(EXIT_FAILURE);
-	}
-	cur = gettok(src);
+	next(":=");
 	expr();
 }
 
 void func_decl()
 {
-	cur = gettok(src);
-	if (cur.name != ID) {
-		fputs("tigy: no id in function declaration\n", stderr);
-		exit(EXIT_FAILURE);
-	}
-	cur = gettok(src);
-	if (strcmp(cur.value, "(")) {
-		fputs("tigy: no ( in function declaration\n", stderr);
-		exit(EXIT_FAILURE);
-	}
-	cur = gettok(src);
-	if (strcmp(cur.value, ")")) {
+	cur = gettoken(src);
+	id();
+	next("(");
+	if (strcmp(cur.value, ")") != 0) {
 		type_fields();
-		if (strcmp(cur.value, ")")) {
-			fputs("tigy: no ) in function declaration\n", stderr);
-			exit(EXIT_FAILURE);
-		}
+		next(")");
+	} else
+		cur = gettoken(src);
+	if (strcmp(cur.value, ":") == 0) {
+		cur = gettoken(src);
+		typeid();
 	}
-	cur = gettok(src);
-	if (!strcmp(cur.value, ":")) {
-		cur = gettok(src);
-		if (cur.name != ID) {
-			fputs("tigy: no type-id in function declaration\n",
-                              stderr);
-			exit(EXIT_FAILURE);
-		}
-		cur = gettok(src);
-	}
-	if (strcmp(cur.value, "=")) {
-		fputs("tigy: no = in function declaration\n", stderr);
-		exit(EXIT_FAILURE);
-	}
-	cur = gettok(src);
+	next("=");
 	expr();
 }
 
 void type_fields()
 {
-	if (cur.name != ID) {
-		fputs("tigy: no id in type-fields\n", stderr);
-		exit(EXIT_FAILURE);
+	id();
+	next(":");
+	typeid();
+	while (strcmp(cur.value, ",") == 0) {
+		cur = gettoken(src);
+		id();
+		next(":");
+		typeid();
 	}
-	cur = gettok(src);
-	if (strcmp(cur.value, ":")) {
-		fputs("tigy: no : in type-fields\n", stderr);
-		exit(EXIT_FAILURE);
-	}
-	cur = gettok(src);
-	if (cur.name != ID) {
-		fputs("tigy: no type-id in type-fields\n", stderr);
-		exit(EXIT_FAILURE);
-	}
-	cur = gettok(src);
-	while (!strcmp(cur.value, ",")) {
-		cur = gettok(src);
-		if (cur.name != ID) {
-			fputs("tigy: no id in type-fields\n", stderr);
-			exit(EXIT_FAILURE);
-		}
-		cur = gettok(src);
-		if (strcmp(cur.value, ":")) {
-			fputs("tigy: no : in type-fields\n", stderr);
-			exit(EXIT_FAILURE);
-		}
-		cur = gettok(src);
-		if (cur.name != ID) {
-			fputs("tigy: no type-id in type-fields\n", stderr);
-			exit(EXIT_FAILURE);
-		}
-		cur = gettok(src);
-	}
+}
+
+void next(const char *lexeme)
+{
+	if (strcmp(cur.value, lexeme) != 0)
+		error("expected", lexeme, cur.line, cur.col);
+	cur = gettoken(src);
+}
+
+void id(void)
+{
+	if (cur.name != ID)
+		error("expected", "identifier", cur.line, cur.col);
+	cur = gettoken(src);
+}
+
+void typeid(void)
+{
+	if (cur.name != ID)
+		error("expected", "type-identifier", cur.line, cur.col);
+	cur = gettoken(src);
 }

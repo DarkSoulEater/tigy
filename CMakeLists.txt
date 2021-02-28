@@ -3,4 +3,4 @@ project(tigy C)
 
 set(CMAKE_C_STANDARD 90)
 
-add_executable(tigy main.c parser.c lexer.c token.h)
+add_executable(tigy main.c parser.c lexer.c token.h diagnostics.c diagnostics.h)

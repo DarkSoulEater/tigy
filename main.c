@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-extern void parsefile(FILE *);
+extern void  parsefile(FILE *);
 static char *parseargs(char **);
 
 int main(int argc, char **argv)
@@ -16,6 +16,7 @@ int main(int argc, char **argv)
 		return EXIT_FAILURE;
 	}
 	parsefile(fp);
+	fclose(fp);
 	return EXIT_SUCCESS;
 }
 
@@ -34,7 +35,6 @@ char *parseargs(char **argv)
 	if (filename == NULL) {
 		fputs("tigy: no input file", stderr);
 		return NULL;
-	} else {
+	} else
 		return filename;
-	}
 }
