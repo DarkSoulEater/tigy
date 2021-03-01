@@ -3,6 +3,7 @@
 #include <string.h>
 #include "diagnostics.h"
 #include "token.h"
+#include "hashtable.h"
 
 static int iskeyword(const char *);
 
@@ -145,10 +146,26 @@ struct token gettoken(FILE *fp)
 
 int iskeyword(const char *s)
 {
-	return !(strcmp(s, "array") && strcmp(s, "break") && strcmp(s, "do") &&
-		strcmp(s, "else") && strcmp(s, "end") && strcmp(s, "for") &&
-		strcmp(s, "function") && strcmp(s, "if") && strcmp(s, "in") &&
-		strcmp(s, "let") && strcmp(s, "nil") && strcmp(s, "of") &&
-		strcmp(s, "then") && strcmp(s, "to") && strcmp(s, "type") &&
-		strcmp(s, "var") && strcmp(s, "while"));
+        static struct hashtable tbkey;
+        if (tbkey.size == 0) {
+                table_create(&tbkey);
+                table_insert(&tbkey, "array");
+                table_insert(&tbkey, "break");
+                table_insert(&tbkey, "do");
+                table_insert(&tbkey, "else");
+                table_insert(&tbkey, "end");
+                table_insert(&tbkey, "for");
+                table_insert(&tbkey, "function");
+                table_insert(&tbkey, "if");
+                table_insert(&tbkey, "in");
+                table_insert(&tbkey, "let");
+                table_insert(&tbkey, "nil");
+                table_insert(&tbkey, "of");
+                table_insert(&tbkey, "then");
+                table_insert(&tbkey, "to");
+                table_insert(&tbkey, "type");
+                table_insert(&tbkey, "var");
+                table_insert(&tbkey, "while");
+        }
+	return table_find(&tbkey, s);
 }
