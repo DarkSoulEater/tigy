@@ -1,10 +1,14 @@
 #include <ctype.h>
 #include <stdio.h>
-#include <string.h>
 #include "diagnostics.h"
 #include "token.h"
 #include "hashtable.h"
 
+static int line = 0;
+static int col = 0;
+
+static int get(FILE* fp);
+static void unget(int ch, FILE *fp);
 static int iskeyword(const char *);
 
 struct token gettoken(FILE *fp)
@@ -14,7 +18,7 @@ struct token gettoken(FILE *fp)
 	int i = 0;
 
 	label_skip:
-	while (isspace(cur[i] = getc(fp)))
+	while (isspace(cur[i] = get(fp)))
 		;
 	if (cur[i] == EOF) {
 		token.name = EMPTY;
@@ -22,32 +26,33 @@ struct token gettoken(FILE *fp)
 		return token;
 	}
 	if (cur[i] == '/') {
-		char cur = getc(fp), prev;
+		char cur = get(fp), prev;
 		int comment_cnt = 1;
 		if(cur == '*') {
 			cur = '.';
 			while (comment_cnt) {
 				prev = cur;
-				cur = getc(fp);
+				cur = get(fp);
 				if (cur == EOF) {
-					error("expected", "end of comment", 0, 0);
+					error("expected", "end of comment", line, col);
 				}
 				if (cur == '*' && prev == '/') ++comment_cnt;
 				else if (cur == '/' && prev == '*') --comment_cnt;
 			}
 			goto label_skip;
 		} else {
-			ungetc(cur, fp);
+			unget(cur, fp);
 		}
 	}
 
+	token.line = line, token.col = col;
 	switch (cur[i]) {
 	case ':': case '<': case '>': {
 		token.name = PUNCTUATOR;
-		if ((cur[++i] = getc(fp)) == '=') {
+		if ((cur[++i] = get(fp)) == '=') {
 			cur[++i] = '\0';
 		} else {
-			if (cur[i] != EOF) ungetc(cur[i], fp);
+			if (cur[i] != EOF) unget(cur[i], fp);
 			cur[i] = '\0';
 		}
 		return token;
@@ -65,12 +70,12 @@ struct token gettoken(FILE *fp)
 	case '"': {
 		token.name = STR;
 		i = -1;
-		while ((cur[++i] = getc(fp)) != '"') {
+		while ((cur[++i] = get(fp)) != '"') {
 			if (i >= TOKLEN) {
-				error("invalid", "string length", 0, 0);
+				error("invalid", "string length", line, col);
 			}
 			if (cur[i] == '\\') {
-				char tmp = getc(fp);
+				char tmp = get(fp);
 				switch (tmp) {
 				case 'n': {
 					cur[i] = '\n';
@@ -93,7 +98,7 @@ struct token gettoken(FILE *fp)
 				}
 
 				default: {
-					error("invalid", "escape sequence", 0, 0);
+					error("invalid", "escape sequence", line, col);
 				}
 				}
 			}
@@ -105,43 +110,55 @@ struct token gettoken(FILE *fp)
 	case '0': case '1': case '2': case '3': case '4':
 	case '5': case '6': case '7': case '8': case '9': {
 		token.name = INT;
-		while (isdigit(cur[++i] = getc(fp))) {
+		while (isdigit(cur[++i] = get(fp))) {
 			if (i >= TOKLEN) {
-				error("invalid", "integer length", 0, 0);
+				error("invalid", "integer length", line, col);
 			}
 		}
 		if (cur[i] == '.') {
 			token.name = FLOAT;
-			while (isdigit(cur[++i] = getc(fp))) {
+			while (isdigit(cur[++i] = get(fp))) {
 				if (i >= TOKLEN) {
-					error("invalid", "float length", 0, 0);
+					error("invalid", "float length", line, col);
 				}
 			}
 		}
-		if (cur[i] != EOF) ungetc(cur[i], fp);
+		if (cur[i] != EOF) unget(cur[i], fp);
 		cur[i] = '\0';
 		if (cur[i - 1] == '.') {
-			error("expected", "fractional part", 0, 0);
+			error("expected", "fractional part", line, col);
 		}
 		return token;
 	}
 
 	default: {
 		while (isalpha(cur[i]) || cur[i] == '_' || isdigit(cur[i])) {
-			cur[++i] = getc(fp);
+			cur[++i] = get(fp);
 			if (i >= TOKLEN) {
-				error("invalid", "identifier length", 0, 0);
+				error("invalid", "identifier length", line, col);
 			}
 		}
-		if (cur[i] != EOF) ungetc(cur[i], fp);
+		if (cur[i] != EOF) unget(cur[i], fp);
 		if (i == 0) {
-			error("invalid", "character", 0, 0);
+			error("invalid", "character", line, col);
 		}
 		cur[i] = '\0';
 		token.name = (iskeyword(token.value) ? KEYWORD : ID);
 		return token;
 	}
 	}
+}
+
+int get(FILE* fp)
+{
+        int c = getc(fp);
+        (c == '\n' ? ++line, col = 0 : ++col);
+        return c;
+}
+
+void unget(int ch, FILE *fp) {
+        ungetc(ch, fp);
+        --col;
 }
 
 int iskeyword(const char *s)
