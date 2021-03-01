@@ -4,7 +4,7 @@
 #include "token.h"
 #include "hashtable.h"
 
-static int line = 0;
+static int line = 1;
 static int col = 0;
 
 static int get(FILE* fp);
@@ -159,6 +159,7 @@ int get(FILE* fp)
 void unget(int ch, FILE *fp) {
         ungetc(ch, fp);
         --col;
+        if (ch == '\n') --line;
 }
 
 int iskeyword(const char *s)
