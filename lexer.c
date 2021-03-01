@@ -24,7 +24,7 @@ struct token gettoken(FILE *fp)
 		char cur = getc(fp), prev;
 		int comment_cnt = 1;
 		if(cur == '*') {
-			cur = '/';
+			cur = '.';
 			while (comment_cnt) {
 				prev = cur;
 				cur = getc(fp);
