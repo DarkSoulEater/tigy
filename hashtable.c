@@ -27,7 +27,7 @@ void table_create(struct hashtable* tb)
         }
 }
 
-int table_find(struct hashtable* tb, char *key)
+int table_find(struct hashtable* tb, const char *key)
 {
         int ind = get_hash_ind(key, tb->buffer_size);
         int step = get_hash_step(key, tb->buffer_size);
@@ -41,7 +41,7 @@ int table_find(struct hashtable* tb, char *key)
         return 0;
 }
 
-int table_insert(struct hashtable* tb, char *key)
+int table_insert(struct hashtable* tb, const char *key)
 {
         if (tb->size + 1 > (int)(REBUILD_FACTOR * tb->buffer_size)) {
                 resize(tb, 2);
@@ -73,7 +73,7 @@ int table_insert(struct hashtable* tb, char *key)
         ++tb->size;
 }
 
-int table_remove(struct hashtable* tb, char *key)
+int table_remove(struct hashtable* tb, const char *key)
 {
         int ind = get_hash_ind(key, tb->buffer_size);
         int step = get_hash_step(key, tb->buffer_size);
