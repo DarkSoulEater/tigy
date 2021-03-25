@@ -1,4 +1,4 @@
-let  /* The eight queens solver from Appel */
+let  /* The eight queens solver */
   var N := 8
   type intArray = array of int
   var row := intArray [ N ] of 0
