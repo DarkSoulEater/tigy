@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
-echo 'Running tests...'
+echo 'Running tests'
 for file in ../test/*.tiger
 do
-  echo "Testing $file..."
+  echo "Running $file"
   ../cmake-build-debug/tigy "$file"
-  echo "Done testing $file"
+  printf 'Done running %s\n\n' "$file"
 done
-echo 'Done running tests'
+echo 'Done testing'
