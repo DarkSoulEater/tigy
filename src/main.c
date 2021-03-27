@@ -10,12 +10,12 @@ static const char *parse_args(const char **argv)
 		if (filename == NULL)
 			filename = *argv;
 		else {
-			fputs("tigy: too many input files", stderr);
+			fputs("tigy: too many input files\n", stderr);
 			return NULL;
 		}
 	}
 	if (filename == NULL) {
-		fputs("tigy: no input file", stderr);
+		fputs("tigy: no input file\n", stderr);
 		return NULL;
 	} else
 		return filename;

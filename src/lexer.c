@@ -161,14 +161,15 @@ static void finish_string(struct source_file *file, char *string)
 			case '\n': case ' ' : case '\t': case '\v': case '\f': case '\r':
 				while (isspace(*string = (char) get_character(file)))
 					;
-				if (*string != '\\')
+				if (*string != '\\') {
+					undo_get_character(*string, file);
 					print_error(file, file->line, file->column,
 						"missing terminating \\ in the whitespace escape sequence");
-				else
-					string--;
+				}
+				string--;
 				break;
 			default:
-				print_error(file,file->line, file->column, "invalid escape sequence '%c'", *string);
+				print_error(file, file->line, file->column, "invalid escape sequence '%c'", *string);
 				break;
 			}
 			string++;
@@ -179,7 +180,8 @@ static void finish_string(struct source_file *file, char *string)
 			if (is_first_error) {
 				is_first_error = false;
 				print_error(file, file->line, file->column,
-					"invalid string constant length, limit - %d", STRING_CONSTANT_LENGTH-1);
+					"invalid string constant length, limit - %d",
+					STRING_CONSTANT_LENGTH - 1);
 			}
 			string--;
 		}
