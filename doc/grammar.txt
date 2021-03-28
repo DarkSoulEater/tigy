@@ -5,44 +5,52 @@
 <string-constant> ::= '"' {<char>} '"'
 <integer-constant> ::= <digit> | <integer-constant> <digit>
 <float-constant> ::= <integer-constant> "." <integer-constant>
-<punctuator> ::= "," | ":" | ";" | "(" | ")" | "[" | "]" | "{" | "}" | "."
-               | "+" | "-" | "*" | "/" | "=" | "<>" | "<" | "<=" | ">" | ">="
-               | "&" | "|" | ":="
+<punctuator> ::= "," | ":" | ";" | "(" | ")" | "[" | "]" | "{" | "}" | "." | "+" | "-" | "*" | "/" | "=" | "<>" | "<"
+               | "<=" | ">" | ">=" | "&" | "|" | ":="
 <type-id> ::= "int" | "string" | "float" | <user-defined-type>
-<keyword> ::= "array" | "break" | "do" | "else" | "end" | "for" | "function"
-            | "if" | "in" | "let" | "nil" | "of" | "then" | "to" | "type"
-            | "var" | "while"
+<keyword> ::= "array" | "break" | "do" | "else" | "end" | "for" | "function" | "if" | "in" | "let" | "nil" | "of"
+            | "then" | "to" | "type" | "var" | "while"
 
 <program> ::= <expr>
-<expr> ::= <string-constant>
-         | <integer-constant>
-         | <float-constant>
-         | "nil"
-         | "-" <expr>
-         | <expr> <binary-operator> <expr>
-         | <lvalue> [":=" <expr>]
-         | <id> "(" [<expr-list>] ")"
-         | "(" [<expr-seq>] ")"
-         | <type-id> "{" [<field-list>] "}"
-         | <type-id> "[" <expr> "]" "of" <expr>
-         | "if" <expr> "then" <expr> ["else" <expr>]
-         | "while" <expr> "do" <expr>
-         | "for" <id> ":=" <expr> "to" <expr> "do" <expr>
-         | "break"
-         | "let" <declaration-list> "in" [<expr-seq>] "end"
+<expr> ::= <or-expr>
+<or-expr> ::= <and-expr> | <or-expr> "|" <and-expr>
+<and-expr> ::= <comparison-expr> | <and-expr> "&" <comparison-expr>
+<comparison-expr> ::= <additive-expr> ("=" | "<>" | "<" | ">" | "<=" | ">=") <additive-expr>
+<additive-expr> ::= <multiplicative-expr> | <additive-expr> ("+" | "-") <multiplicative-expr>
+<multiplicative-expr> ::= <primary-expr> | <multiplicative-expr> ("*" | "/") <primary-expr>
+<primary-expr> ::= <string-constant>
+                 | <integer-constant>
+                 | <float-constant>
+                 | "nil"
+                 | <lvalue>
+                 | <record-object>
+                 | <array-object>
+                 | <assignment-expr>
+                 | <function-call>
+                 | <if-expr>
+                 | <while-expr>
+                 | <for-expr>
+                 | "break"
+                 | <let-expr>
+                 | "-" <expr>
+                 | "(" [<expr-seq>] ")"
+<assignment-expr> ::= <lvalue> ":=" <expr>
+<if-expr> ::= "if" <expr> "then" <expr> ["else" <expr>]
+<while-expr> ::= "while" <expr> "do" <expr>
+<for-expr> ::= "for" <id> ":=" <expr> "to" <expr> "do" <expr>
+<let-expr> ::= "let" <declaration-list> "in" [<expr-seq>] "end"
+<function-call> ::= <id> "(" [<expr-list>] ")"
+<record-object> ::= <type-id> "{" [<field-list>] "}"
+<array-object> ::= <type-id> "[" <expr> "]" "of" <expr>
 <lvalue> ::= <id> | <lvalue> "." <id> | <lvalue> "[" <expr> "]"
-<binary-operator> ::= "+" | "-" | "*" | "/" | "=" | "<>" | "<" | "<=" | ">"
-                    | ">=" | "&" | "|"
 <expr-seq> ::= <expr> | <expr-seq> ";" <expr>
 <expr-list> ::= <expr> | <expr-list> "," <expr>
-<field-list> ::= <id> "=" <expr> | <field-list> "," <id> "=" <expr>
+<field-list> ::= <field> | <field-list> "," <field>
+<field> ::= <id> "=" <expr>
 <declaration-list> ::= <declaration> | <declaration-list> <declaration>
-<declaration> ::= <type-declaration>
-                | <variable-declaration>
-                | <function-declaration>
+<declaration> ::= <type-declaration> | <variable-declaration> | <function-declaration>
 <type-declaration> ::= "type" <type-id> "=" <type>
 <variable-declaration> ::= "var" <id> [":" <type-id>] ":=" <expr>
-<function-declaration> ::= "function" <id> "(" [<type-fields>] ")"
-                           [":" <type-id>] "=" <expr>
+<function-declaration> ::= "function" <id> "(" [<type-fields>] ")" [":" <type-id>] "=" <expr>
 <type> ::= <type-id> | "{" [<type-fields>] "}" | "array" "of" <type-id>
 <type-fields> ::= <id> ":" <type-id> | <type-fields> "," <id> ":" <type-id>

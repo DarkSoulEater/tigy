@@ -254,23 +254,7 @@ static void parse_identifier(void)
 	}
 }
 
-static int is_binary_operator(enum token_type type)
-{
-	return type == PLUS ||
-		type == MINUS ||
-		type == ASTERISK ||
-		type == SLASH ||
-		type == EQUAL ||
-		type == NOT_EQUAL ||
-		type == LESS ||
-		type == LESS_EQUAL ||
-		type == GREATER ||
-		type == GREATER_EQUAL ||
-		type == AND ||
-		type == OR;
-}
-
-static void parse_expression(void)
+static void parse_primary_expression(void)
 {
 	switch (current_token.name) {
 	case STRING_CONSTANT:
@@ -288,19 +272,75 @@ static void parse_expression(void)
 		current_token = get_token(source_file);
 		parse_sequence(RIGHT_PARENTHESIS, parse_expression, SEMICOLON);
 		break;
-	case IF_KEYWORD: current_token = get_token(source_file); parse_if_expression(); break;
-	case WHILE_KEYWORD: current_token = get_token(source_file); parse_while_expression(); break;
-	case FOR_KEYWORD: current_token = get_token(source_file); parse_for_expression(); break;
-	case LET_KEYWORD: current_token = get_token(source_file); parse_let_expression(); break;
-	case IDENTIFIER: current_token = get_token(source_file); parse_identifier(); break;
+	case IF_KEYWORD:
+		current_token = get_token(source_file);
+		parse_if_expression();
+		break;
+	case WHILE_KEYWORD:
+		current_token = get_token(source_file);
+		parse_while_expression();
+		break;
+	case FOR_KEYWORD:
+		current_token = get_token(source_file);
+		parse_for_expression();
+		break;
+	case LET_KEYWORD:
+		current_token = get_token(source_file);
+		parse_let_expression();
+		break;
+	case IDENTIFIER:
+		current_token = get_token(source_file);
+		parse_identifier();
+		break;
 	default:
 		print_error(source_file, current_token.line, current_token.column, "expected expression");
 		break;
 	}
-	if (is_binary_operator(current_token.name)) {
+}
+
+static void parse_multiplicative_expression(void)
+{
+	while (parse_primary_expression(), current_token.name == ASTERISK || current_token.name == SLASH)
 		current_token = get_token(source_file);
-		parse_expression();
-	}
+}
+
+static void parse_additive_expression(void)
+{
+	while (parse_multiplicative_expression(), current_token.name == PLUS || current_token.name == MINUS)
+		current_token = get_token(source_file);
+}
+
+static bool is_comparison_operator(void)
+{
+	return current_token.name == EQUAL ||
+		current_token.name == NOT_EQUAL ||
+		current_token.name == LESS ||
+		current_token.name == LESS_EQUAL ||
+		current_token.name == GREATER ||
+		current_token.name == GREATER_EQUAL;
+}
+
+static void parse_comparison_expression(void)
+{
+	while (parse_additive_expression(), is_comparison_operator())
+		current_token = get_token(source_file);
+}
+
+static void parse_and_expression(void)
+{
+	while (parse_comparison_expression(), current_token.name == AND)
+		current_token = get_token(source_file);
+}
+
+static void parse_or_expression(void)
+{
+	while (parse_and_expression(), current_token.name == OR)
+		current_token = get_token(source_file);
+}
+
+static void parse_expression(void)
+{
+	parse_or_expression();
 }
 
 void parse_source_file(struct source_file *file)
