@@ -9,7 +9,7 @@
 #include <stdio.h>
 
 struct source_file {
-	char *name;
+	const char *name;
 	FILE *data;
 	int line, column;
 	bool is_correct;

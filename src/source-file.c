@@ -20,8 +20,7 @@ struct source_file *open_source_file(const char *filename)
 		return NULL;
 	}
 	struct source_file *file = malloc(sizeof(struct source_file));
-	file->name = malloc(sizeof *filename * (strlen(filename) + 1));
-	strcpy(file->name, filename);
+	file->name = filename;
 	file->data = data;
 	file->line = 1, file->column = 1;
 	file->is_correct = true;
@@ -33,11 +32,9 @@ void close_source_file(struct source_file **file)
 	assert(file != NULL && *file != NULL);
 	if (fclose((*file)->data) == EOF) {
 		fprintf(stderr, "tigy: could not close %s\n", (*file)->name);
-		free((*file)->name);
 		free(*file);
 		return;
 	}
-	free((*file)->name);
 	free(*file);
 	*file = NULL;
 }
