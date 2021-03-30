@@ -7,15 +7,6 @@
 
 #include "../token.h"
 
-struct hash_table {
-    int buffer_size;
-    int size;
-    struct binding {
-    	char key[IDENTIFIER_LENGTH];
-    	void *value;
-    } **data;
-};
-
 struct hash_table *table_allocate(void);
 void *table_lookup(struct hash_table* table, const char *key);
 void table_insert(struct hash_table* table, const char *key, void *value);
