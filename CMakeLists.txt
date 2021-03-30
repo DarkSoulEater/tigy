@@ -10,7 +10,11 @@ add_executable(
         src/parser.c
         src/lexer.c
         src/token.h
-        src/hash-table.c
-        src/hash-table.h
         src/source-file.c
-        src/source-file.h)
+        src/source-file.h
+        src/util/hash-table.c
+        src/util/hash-table.h
+        src/util/stack.c
+        src/util/stack.h
+        src/util/array.c
+        src/util/array.h)
