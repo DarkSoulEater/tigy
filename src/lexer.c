@@ -44,7 +44,7 @@ static void finish_word(struct source_file *file, char *word)
 	*word = '\0';
 }
 
-static enum token_type keyword_type(const char *keyword)
+static enum token_kind keyword_kind(const char *keyword)
 {
 	if (strcmp(keyword, "array") == 0)
 		return ARRAY_KEYWORD;
@@ -229,7 +229,7 @@ struct token get_token(struct source_file *file)
 	case 'W': case 'X': case 'Y': case 'Z':
 		*token.value.identifier = (char) character;
 		finish_word(file, token.value.identifier);
-		token.name = keyword_type(token.value.identifier);
+		token.name = keyword_kind(token.value.identifier);
 		if (token.name == NONE)
 			token.name = IDENTIFIER;
 		break;

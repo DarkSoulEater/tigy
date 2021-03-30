@@ -3,6 +3,7 @@
 //
 
 #include <assert.h>
+#include <stdbool.h>
 
 #include "source-file.h"
 #include "token.h"
@@ -10,7 +11,7 @@
 static struct source_file *source_file;
 static struct token current_token;
 
-static const char *token_type_string[] = {
+static const char *token_kind_string[] = {
 	"",
 	"identifier",
 	"integer constant",
@@ -58,19 +59,19 @@ static const char *token_type_string[] = {
 	":=",
 };
 
-static void parse_next_token(enum token_type type)
+static void parse_next_token(enum token_kind kind)
 {
-	if (current_token.name != type)
+	if (current_token.name != kind)
 		print_error(source_file, current_token.line, current_token.column,
-			"expected %s", token_type_string[type]);
+			"expected %s", token_kind_string[kind]);
 	else
 		current_token = get_token(source_file);
 }
 
 static void parse_sequence(
-	enum token_type end,
+	enum token_kind end,
 	void (*element)(void),
-	enum token_type delimiter)
+	enum token_kind delimiter)
 {
 	if (current_token.name == end)
 		current_token = get_token(source_file);

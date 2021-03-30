@@ -9,7 +9,7 @@
 #define STRING_CONSTANT_LENGTH 128
 
 struct token {
-        enum token_type {
+        enum token_kind {
         	NONE,
         	IDENTIFIER,
 		INTEGER_CONSTANT,
