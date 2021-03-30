@@ -92,4 +92,12 @@ void table_insert(struct hash_table* table, const char *key, void *value) {
         table->size++;
 }
 
-void table_free(struct hash_table **table) {}
+void table_free(struct hash_table **table) {
+        for (int i = 0; i < (*table)->buffer_size; ++i) {
+                if ((*table)->data != NULL)
+                        free((*table)->data[i]);
+        }
+        free((*table)->data);
+        free(*table);
+        table = NULL;
+}
