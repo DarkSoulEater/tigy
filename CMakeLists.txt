@@ -17,4 +17,6 @@ add_executable(
         src/util/stack.c
         src/util/stack.h
         src/util/array.c
-        src/util/array.h)
+        src/util/array.h
+        src/util/namespace.c
+        src/util/namespace.h)
