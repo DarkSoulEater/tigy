@@ -44,6 +44,12 @@ void *array_at_index(struct array *array, size_t index)
 	return array->data[index];
 }
 
+size_t array_size(struct array *array)
+{
+	assert(array != NULL);
+	return array->size;
+}
+
 bool array_is_empty(struct array *array)
 {
 	assert(array != NULL);

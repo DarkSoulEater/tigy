@@ -5,7 +5,7 @@
 #ifndef TIGY_HASH_TABLE_H
 #define TIGY_HASH_TABLE_H
 
-#include "../token.h"
+#include "../front-end/syntax/token.h"
 
 struct hash_table *table_allocate(void);
 void *table_lookup(struct hash_table* table, const char *key);

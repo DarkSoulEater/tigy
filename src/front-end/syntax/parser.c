@@ -7,6 +7,8 @@
 
 #include "source-file.h"
 #include "token.h"
+#include "../semantics/type-check.h"
+#include "../../back-end/generate.h"
 
 static struct source_file *source_file;
 static struct token current_token;
@@ -68,15 +70,43 @@ static void parse_next_token(enum token_kind kind)
 		current_token = get_token(source_file);
 }
 
-static void parse_sequence(
-	enum token_kind end,
-	void (*element)(void),
-	enum token_kind delimiter)
+static void parse_expression(void);
+
+static void parse_expression_sequence(enum token_kind end)
 {
 	if (current_token.name == end)
 		current_token = get_token(source_file);
 	else {
-		while (element(), current_token.name == delimiter)
+		while (parse_expression(), current_token.name == SEMICOLON)
+			current_token = get_token(source_file);
+		parse_next_token(end);
+	}
+}
+
+static void parse_expression_list(enum token_kind end)
+{
+	if (current_token.name == end)
+		current_token = get_token(source_file);
+	else {
+		while (parse_expression(), current_token.name == COMMA)
+			current_token = get_token(source_file);
+		parse_next_token(end);
+	}
+}
+
+static void parse_field(void)
+{
+	parse_next_token(IDENTIFIER);
+	parse_next_token(EQUAL);
+	parse_expression();
+}
+
+static void parse_field_list(enum token_kind end)
+{
+	if (current_token.name == end)
+		current_token = get_token(source_file);
+	else {
+		while (parse_field(), current_token.name == COMMA)
 			current_token = get_token(source_file);
 		parse_next_token(end);
 	}
@@ -89,12 +119,23 @@ static void parse_type_field(void)
 	parse_next_token(IDENTIFIER);
 }
 
+static void parse_type_fields(enum token_kind end)
+{
+	if (current_token.name == end)
+		current_token = get_token(source_file);
+	else {
+		while (parse_type_field(), current_token.name == COMMA)
+			current_token = get_token(source_file);
+		parse_next_token(end);
+	}
+}
+
 static void parse_type_definition(void)
 {
 	switch (current_token.name) {
 	case LEFT_BRACE:
 		current_token = get_token(source_file);
-		parse_sequence(RIGHT_BRACE, parse_type_field, COMMA);
+		parse_type_fields(RIGHT_BRACE);
 		break;
 	case ARRAY_KEYWORD:
 		current_token = get_token(source_file);
@@ -118,14 +159,12 @@ static void parse_type_specifier(void)
 	}
 }
 
-static void parse_expression(void);
-
 static void parse_function_declaration(void)
 {
 	parse_next_token(FUNCTION_KEYWORD);
 	parse_next_token(IDENTIFIER);
 	parse_next_token(LEFT_PARENTHESIS);
-	parse_sequence(RIGHT_PARENTHESIS, parse_type_field, COMMA);
+	parse_type_fields(RIGHT_PARENTHESIS);
 	parse_type_specifier();
 	parse_next_token(EQUAL);
 	parse_expression();
@@ -157,13 +196,6 @@ static void parse_declaration_list(void)
 	default: return;
 	}
 	parse_declaration_list();
-}
-
-static void parse_record_field(void)
-{
-	parse_next_token(IDENTIFIER);
-	parse_next_token(EQUAL);
-	parse_expression();
 }
 
 static void parse_lvalue_suffix(void)
@@ -222,7 +254,7 @@ static void parse_let_expression(void)
 		parse_declaration_list();
 		parse_next_token(IN_KEYWORD);
 	}
-	parse_sequence(END_KEYWORD, parse_expression, SEMICOLON);
+	parse_expression_sequence(END_KEYWORD);
 }
 
 static void parse_identifier(void)
@@ -230,7 +262,7 @@ static void parse_identifier(void)
 	switch (current_token.name) {
 	case LEFT_BRACE:
 		current_token = get_token(source_file);
-		parse_sequence(RIGHT_BRACE, parse_record_field, COMMA);
+		parse_field_list(RIGHT_BRACE);
 		break;
 	case LEFT_BRACKET:
 		current_token = get_token(source_file);
@@ -250,7 +282,7 @@ static void parse_identifier(void)
 		break;
 	case LEFT_PARENTHESIS:
 		current_token = get_token(source_file);
-		parse_sequence(RIGHT_PARENTHESIS, parse_expression, COMMA);
+		parse_expression_list(RIGHT_PARENTHESIS);
 		break;
 	}
 }
@@ -271,7 +303,7 @@ static void parse_primary_expression(void)
 		break;
 	case LEFT_PARENTHESIS:
 		current_token = get_token(source_file);
-		parse_sequence(RIGHT_PARENTHESIS, parse_expression, SEMICOLON);
+		parse_expression_sequence(RIGHT_PARENTHESIS);
 		break;
 	case IF_KEYWORD:
 		current_token = get_token(source_file);
@@ -347,10 +379,13 @@ static void parse_expression(void)
 void parse_source_file(struct source_file *file)
 {
 	assert(file != NULL);
+	init_namespaces();
+	init_type_check();
 	source_file = file;
 	current_token = get_token(source_file);
 	parse_expression();
 	if (current_token.name != NONE)
 		print_error(source_file, current_token.line, current_token.column,
 			"trailing code after the main expression");
+	clean_up_type_check();
 }

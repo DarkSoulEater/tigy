@@ -5,7 +5,7 @@
 #include <assert.h>
 #include <stdlib.h>
 
-#include "hash-table.h"
+#include "../../util/hash-table.h"
 #include "namespace.h"
 
 struct namespace {

@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "source-file.h"
+#include "front-end/syntax/source-file.h"
+#include "front-end/semantics/type-check.h"
 
 static const char *parse_args(const char **argv)
 {
@@ -30,6 +31,7 @@ int main(int argc, const char **argv)
 	parse_source_file(file);
 	if (!file->is_correct)
 		return EXIT_FAILURE;
+	clean_up_namespaces();
 	close_source_file(&file);
 	if (file != NULL)
 		return EXIT_FAILURE;
