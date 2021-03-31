@@ -22,4 +22,5 @@ extern void check_equality_operation(struct source_file *file, struct token *ope
 extern void check_comparison_operation(struct source_file *file, struct token *operation);
 extern void check_logical_operation(struct source_file *file, struct token *operation);
 
+
 #endif //TIGY_TYPE_CHECK_H
