@@ -5,13 +5,15 @@
 #include <assert.h>
 #include <stdbool.h>
 
-#include "source-file.h"
-#include "token.h"
-#include "../semantics/type-check.h"
-#include "../../back-end/generate.h"
+#include "front-end/syntax/source-file.h"
+#include "front-end/syntax/token.h"
+#include "front-end/semantics/type-check.h"
+#include "front-end/semantics/program.h"
+#include "back-end/generate.h"
 
 static struct source_file *source_file;
 static struct token current_token;
+static struct program *program;
 
 static const char *token_kind_string[] = {
 	"",
@@ -293,7 +295,6 @@ static void parse_primary_expression(void)
 	case STRING_CONSTANT:
 	case INTEGER_CONSTANT:
 	case FLOAT_CONSTANT:
-	case NIL_KEYWORD:
 	case BREAK_KEYWORD:
 		current_token = get_token(source_file);
 		break;
@@ -376,16 +377,17 @@ static void parse_expression(void)
 	parse_or_expression();
 }
 
-void parse_source_file(struct source_file *file)
+struct program *parse_source_file(struct source_file *file)
 {
 	assert(file != NULL);
-	init_namespaces();
-	init_type_check();
 	source_file = file;
+	init_type_check();
+	program = program_allocate();
 	current_token = get_token(source_file);
 	parse_expression();
 	if (current_token.name != NONE)
 		print_error(source_file, current_token.line, current_token.column,
 			"trailing code after the main expression");
 	clean_up_type_check();
+	return program;
 }

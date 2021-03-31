@@ -8,7 +8,7 @@
 <punctuator> ::= "," | ":" | ";" | "(" | ")" | "[" | "]" | "{" | "}" | "." | "+" | "-" | "*" | "/" | "=" | "<>" | "<"
                | "<=" | ">" | ">=" | "&" | "|" | ":="
 <type-id> ::= "int" | "string" | "float" | <user-defined-type>
-<keyword> ::= "array" | "break" | "do" | "else" | "end" | "for" | "function" | "if" | "in" | "let" | "nil" | "of"
+<keyword> ::= "array" | "break" | "do" | "else" | "end" | "for" | "function" | "if" | "in" | "let" | "of"
             | "then" | "to" | "type" | "var" | "while"
 
 <program> ::= <expr>
@@ -21,7 +21,6 @@
 <primary-expr> ::= <string-constant>
                  | <integer-constant>
                  | <float-constant>
-                 | "nil"
                  | <lvalue>
                  | <record-object>
                  | <array-object>

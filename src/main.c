@@ -2,7 +2,8 @@
 #include <stdlib.h>
 
 #include "front-end/syntax/source-file.h"
-#include "front-end/semantics/type-check.h"
+#include "front-end/semantics/program.h"
+#include "back-end/execute.h"
 
 static const char *parse_args(const char **argv)
 {
@@ -28,10 +29,12 @@ int main(int argc, const char **argv)
 	const char *filename = parse_args(argv);
 	if (filename == NULL || (file = open_source_file(filename)) == NULL)
 		return EXIT_FAILURE;
-	parse_source_file(file);
-	if (!file->is_correct)
+	struct program *program = parse_source_file(file);
+	if (file->is_correct)
+		execute_program(program);
+	else
 		return EXIT_FAILURE;
-	clean_up_namespaces();
+	program_free(&program);
 	close_source_file(&file);
 	if (file != NULL)
 		return EXIT_FAILURE;

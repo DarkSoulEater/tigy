@@ -18,7 +18,7 @@ struct source_file {
 extern struct source_file *open_source_file(const char *filename);
 extern void close_source_file(struct source_file **file);
 
-extern void parse_source_file(struct source_file *file);
+extern struct program *parse_source_file(struct source_file *file);
 extern struct token get_token(struct source_file *file);
 
 extern void print_error(struct source_file *location, int line, int column, const char *format, ...);

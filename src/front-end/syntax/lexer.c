@@ -3,8 +3,8 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "source-file.h"
-#include "token.h"
+#include "front-end/syntax/source-file.h"
+#include "front-end/syntax/token.h"
 
 static int get_character(struct source_file *file)
 {
@@ -66,8 +66,6 @@ static enum token_kind keyword_kind(const char *keyword)
 		return IN_KEYWORD;
 	else if (strcmp(keyword, "let") == 0)
 		return LET_KEYWORD;
-	else if (strcmp(keyword, "nil") == 0)
-		return NIL_KEYWORD;
 	else if (strcmp(keyword, "of") == 0)
 		return OF_KEYWORD;
 	else if (strcmp(keyword, "then") == 0)

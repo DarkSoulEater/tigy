@@ -9,7 +9,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "source-file.h"
+#include "front-end/syntax/source-file.h"
 
 struct source_file *open_source_file(const char *filename)
 {

@@ -21,9 +21,4 @@ struct variable {
 	void *data;
 };
 
-struct function {
-	struct type *return_type;
-	// TODO
-};
-
 #endif //TIGY_TYPES_H

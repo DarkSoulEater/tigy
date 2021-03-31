@@ -6,7 +6,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
-#include "stack.h"
+#include "util/stack.h"
 
 struct stack {
 	size_t size;

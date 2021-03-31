@@ -7,7 +7,7 @@
 #include <stddef.h>
 #include <stdlib.h>
 
-#include "array.h"
+#include "util/array.h"
 
 struct array {
 	size_t size, capacity;

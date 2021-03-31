@@ -25,7 +25,6 @@ struct token {
         	IF_KEYWORD,
         	IN_KEYWORD,
         	LET_KEYWORD,
-        	NIL_KEYWORD,
         	OF_KEYWORD,
         	THEN_KEYWORD,
         	TO_KEYWORD,
