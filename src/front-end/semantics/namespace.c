@@ -10,7 +10,9 @@
 
 struct namespace {
 	struct scope {
-		struct hash_table *hash_table;
+		struct hash_table *type_table;
+		struct hash_table *var_table;
+		struct hash_table *function_table;
 		struct scope *link;
 	} *data;
 };
