@@ -23,9 +23,11 @@ add_executable(
         src/front-end/semantics/scope.h
         src/back-end/generate.c
         src/back-end/generate.h
+        src/back-end/execute.c
+        src/back-end/execute.h
         src/util/hash-table.c
         src/util/hash-table.h
         src/util/stack.c
         src/util/stack.h
         src/util/array.c
-        src/util/array.h src/back-end/execute.c src/back-end/execute.h)
+        src/util/array.h)

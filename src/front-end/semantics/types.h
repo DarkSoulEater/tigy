@@ -5,6 +5,8 @@
 #ifndef TIGY_TYPES_H
 #define TIGY_TYPES_H
 
+#include "util/array.h"
+
 struct type {
 	enum type_kind {
 		INT,
@@ -19,6 +21,11 @@ struct type {
 struct variable {
 	struct type *type;
 	void *data;
+};
+
+struct function {
+	struct array *fields;
+	struct scope *scope;
 };
 
 #endif //TIGY_TYPES_H
