@@ -1,0 +1,5 @@
+let
+    var b := 10
+in 10 end
+
+var a := 10

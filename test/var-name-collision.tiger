@@ -1,0 +1,7 @@
+let
+    var N := 13123
+    type intArr = array of int
+    type floatArr = array of float
+    var arr := intArr[N] of 12
+    var arr := floatArr[12] of N
+in 10 end

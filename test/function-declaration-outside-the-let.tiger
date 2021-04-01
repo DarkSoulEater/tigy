@@ -1,0 +1,11 @@
+let
+    var b := 10
+in 10 end
+
+function get_type() = (
+    let
+        var w = 10
+        var = 12
+        var 10
+    in end
+)

@@ -1,0 +1,15 @@
+let
+    function f1() = (
+        let
+            function f2() = (
+                let
+                    function f3() = (
+                        let
+                            function f4() = ()
+                        in end
+                    )
+                in end
+            )
+        in end
+    )
+in f1() end

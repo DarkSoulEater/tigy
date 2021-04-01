@@ -1,0 +1,6 @@
+let
+    function find() : int =
+        if find() = 10 then 10
+
+    function find() : flaot = 10
+in end
