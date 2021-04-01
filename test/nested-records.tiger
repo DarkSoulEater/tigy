@@ -1,0 +1,9 @@
+let
+    type rec = { A : int }
+    type vector = {
+        X : rec,
+        Y : float
+    }
+
+    var Vec : vector := vector { X = rec { Q = 2 }, Y = 0.33 }
+in 1 end

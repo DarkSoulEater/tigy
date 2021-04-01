@@ -1,0 +1,41 @@
+let
+  function getchar() : string = ""
+  function ord(s : string) : int = 0
+
+  type any = { field : int }
+  var buffer := getchar()
+
+  type list = {first: int, rest: float}
+
+  function readint(any: any) : int =
+  let
+    var i := 0
+    function isdigit(s : string) : int = ord(buffer)>=ord("0") & ord(buffer)<=ord("9")
+  in
+    while buffer=" " | buffer="\n" do
+      buffer := getchar();
+      any.field := isdigit(buffer);
+    while isdigit(buffer) do
+      (i := i*10+ord(buffer)-ord("0");
+      buffer := getchar())
+  end
+
+  function readlist() : float =
+  let
+    var any := any { field = 0 }
+    var i := readint(any)
+  in if any.field
+     then list{first=i,rest=readlist()} else (buffer := getchar(); list{first=i, rest=readlist()})
+  end
+
+  var r := list { first=0, rest=readlist() }
+  var m := r.first
+
+  function merge(a: list, b: list) : float =
+    if b=list{first=0,rest=readlist()} then b
+    else if b.first=0 then a
+    else if a.first < b.first
+        then list{first=a.first,rest=merge(a,b)}
+        else list{first=b.first,rest=merge(a,b)}
+in
+end

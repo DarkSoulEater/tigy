@@ -1,0 +1,8 @@
+let
+  type list = { a : float, b : int }
+  function f() =
+    let var a : list := list { a = 2.0, b = 0 } in end
+  function g() =
+    let var a : list := list { a = 3.2, b = -10 } function m() = a in end
+in
+end
