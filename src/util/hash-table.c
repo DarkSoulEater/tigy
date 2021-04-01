@@ -92,7 +92,7 @@ void table_insert(struct hash_table* table, const char *key, void *value)
         int index = get_hash_index(key, table->buffer_size);
         int step = get_hash_step(key, table->buffer_size);
         while (table->data[index] != NULL) {
-                assert(strcmp(table->data[index]->key, key));
+                assert(strcmp(table->data[index]->key, key) != 0);
                 index = (index + step) % table->buffer_size;
         }
         table->data[index] = malloc(sizeof(struct binding));

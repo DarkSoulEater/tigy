@@ -56,7 +56,11 @@ void check_algebraic_operation(struct source_file *file, struct token operation)
         assert(file != NULL);
         struct type *rhs = get_type();
         struct type *lhs = get_type();
-        if (!is_algebraic(rhs) || !is_algebraic(lhs))
+        if (lhs == NULL || rhs == NULL) {
+		print_error(file, operation.line, operation.column,"non-value operand in operator");
+		return;
+	}
+	if (!is_algebraic(rhs) || !is_algebraic(lhs))
                 print_error(file, operation.line, operation.column,"invalid algebraic operator operands type");
         else {
         	if (lhs->kind == FLOAT)
@@ -70,11 +74,12 @@ void check_comparison_operation(struct source_file *file, struct token operation
         assert(file != NULL);
         struct type *rhs = get_type();
         struct type *lhs = get_type();
-        if (operation.name == EQUAL || operation.name == NOT_EQUAL) {
-		if ((!is_algebraic(rhs) || !is_algebraic(lhs))
-			&& (rhs->kind != STRING || lhs->kind != STRING)
-			&& (rhs->kind != ARRAY || lhs->kind != ARRAY || rhs->data != lhs->data)
-			&& (rhs->kind != RECORD || lhs->kind != RECORD || rhs->data != lhs->data))
+	if (lhs == NULL || rhs == NULL) {
+		print_error(file, operation.line, operation.column,"non-value operand in operator");
+		return;
+	}
+	if (operation.name == EQUAL || operation.name == NOT_EQUAL) {
+		if (!(is_algebraic(lhs) && is_algebraic(rhs) || lhs == rhs))
 			print_error(file, operation.line, operation.column,"invalid equality operator operands type");
 		else {
 			rhs->kind = INT;
@@ -94,6 +99,10 @@ void check_logical_operation(struct source_file *file, struct token operation)
         assert(file != NULL);
         struct type *rhs = get_type();
         struct type *lhs = get_type();
+	if (lhs == NULL || rhs == NULL) {
+		print_error(file, operation.line, operation.column,"non-value operand in operator");
+		return;
+	}
         if (!is_algebraic(rhs) || !is_algebraic(lhs))
                 print_error(file, operation.line, operation.column,"invalid logical operator operands type");
         else {
@@ -106,10 +115,11 @@ void check_assignment_operation(struct source_file *file, struct token operation
         assert(file != NULL);
         struct type *rhs = get_type();
         struct type *lhs = get_type();
-        if ((!is_algebraic(rhs) || !is_algebraic(lhs))
-            && (rhs->kind != STRING || lhs->kind != STRING)
-            && (rhs->kind != ARRAY || lhs->kind != ARRAY || rhs->data != lhs->data)
-            && (rhs->kind != RECORD || lhs->kind != RECORD || rhs->data != lhs->data))
+	if (lhs == NULL || rhs == NULL) {
+		print_error(file, operation.line, operation.column,"non-value operand in operator");
+		return;
+	}
+        if (!(is_algebraic(lhs) && is_algebraic(rhs) || lhs == rhs))
                 print_error(file, operation.line, operation.column,"invalid assignment operator operands type");
         else
         	stack_push(expression_types, NULL);
@@ -119,6 +129,10 @@ void check_unary_minus(struct source_file *file, struct token operation)
 {
 	assert(file != NULL);
 	struct type *rhs = get_type();
+	if (rhs == NULL) {
+		print_error(file, operation.line, operation.column,"non-value operand in operator");
+		return;
+	}
 	if (!is_algebraic(rhs))
 		print_error(file, operation.line, operation.column,"invalid unary minus operand type");
 	else

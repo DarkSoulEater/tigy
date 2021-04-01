@@ -109,12 +109,12 @@ static void parse_expression_list(enum token_kind end, struct token function_ide
 	} else {
 		int i;
 		for (i = 0; parse_expression(), current_token.name == COMMA; i++) {
-			if (source_file->is_correct && ((struct field *) array_at_index(function->fields, i))->type != stack_peak(expression_types))
+			if (source_file->is_correct && ((struct field *) array_at_index(function->fields, i))->type != stack_pop(expression_types))
 				print_error(source_file, function_identifier.line, function_identifier.column,
 					"function '%s' arguments and parameters does not match", function_identifier.value.identifier);
 			current_token = get_token(source_file);
 		}
-		if (source_file->is_correct && ((struct field *) array_at_index(function->fields, i))->type != stack_peak(expression_types))
+		if (source_file->is_correct && ((struct field *) array_at_index(function->fields, i))->type != stack_pop(expression_types))
 			print_error(source_file, function_identifier.line, function_identifier.column,
 				"function '%s' arguments and parameters does not match", function_identifier.value.identifier);
 		if (source_file->is_correct && array_size(function->fields) != i + 1)
@@ -140,8 +140,8 @@ static void parse_field(struct record *record)
 	parse_next_token(IDENTIFIER);
 	parse_next_token(EQUAL);
 	parse_expression();
-	struct type *type = stack_peak(expression_types);
-	if (source_file->is_correct && !has_record_field(record, identifier, type))
+	struct type *type;
+	if (source_file->is_correct && !has_record_field(record, identifier, type = stack_pop(expression_types)))
 		print_error(source_file, identifier.line, identifier.column,
 			"no matching actual field in record initialization for '%s'", identifier.value.identifier);
 }
@@ -203,7 +203,8 @@ static void parse_record_type(enum token_kind end, struct token type_identifier)
 	if (source_file->is_correct) {
 		record_type = malloc(sizeof(struct type));
 		record_type->kind = RECORD;
-		record = record_type->data;
+		record = malloc(sizeof(struct record));
+		record_type->data = record;
 		record->fields = array_allocate();
 	}
 	if (current_token.name == end)
@@ -288,7 +289,11 @@ static void parse_function_parameter(struct array *fields)
 		struct variable *variable = malloc(sizeof(struct variable));
 		variable->type = field->type;
 		variable->data = NULL;
-		scope_insert_variable(program_current_scope(program), identifier.value.identifier, variable);
+		if (source_file->is_correct && scope_lookup_variable(program_current_scope(program), identifier.value.identifier) != NULL)
+			print_error(source_file, identifier.line, identifier.column,
+				"function has parameters with the same name '%s'", identifier.value.identifier);
+		else
+			scope_insert_variable(program_current_scope(program), identifier.value.identifier, variable);
 		if (field == NULL)
 			print_error(source_file, type_identifier.line, type_identifier.column,
 				"use of undeclared type '%s'", type_identifier.value.identifier);
@@ -364,7 +369,7 @@ static void parse_variable_declaration(void)
 				"use of undeclared type '%s'", type_identifier.value.identifier);
 		if (source_file->is_correct && stack_peak(expression_types) != type)
 			print_error(source_file, type_identifier.line, type_identifier.column,
-				"expression and specified type does not match'%s'", type_identifier.value.identifier);
+				"expression and specified type '%s' does not match", type_identifier.value.identifier);
 	} else {
 		parse_next_token(ASSIGNMENT);
 		parse_expression();
@@ -625,7 +630,8 @@ static void parse_primary_expression(void)
 	case MINUS:
 		current_token = get_token(source_file);
 		parse_expression();
-		check_unary_minus(source_file, current_token);
+		if (source_file->is_correct)
+			check_unary_minus(source_file, current_token);
 		break;
 	case LEFT_PARENTHESIS:
 		current_token = get_token(source_file);
