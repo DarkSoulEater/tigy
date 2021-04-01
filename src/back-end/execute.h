@@ -9,6 +9,7 @@
 
 extern struct stack *execution_buffer;
 
+extern void execute_scope(struct scope *scope);
 extern void execute_program(struct program *program);
 
 #endif //TIGY_EXECUTE_H

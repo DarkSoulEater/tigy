@@ -9,6 +9,7 @@
 
 extern struct stack *stack_allocate(void);
 extern bool stack_is_empty(struct stack *stack);
+extern void *stack_peak(struct stack *stack);
 extern void stack_push(struct stack *stack, void *value);
 extern void *stack_pop(struct stack *stack);
 extern void stack_free(struct stack **stack);

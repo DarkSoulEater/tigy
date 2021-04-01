@@ -5,18 +5,10 @@
 #ifndef TIGY_GENERATE_H
 #define TIGY_GENERATE_H
 
-#include "../util/array.h"
-
-extern struct array *execution_sequence;
-extern struct array *execution_operands;
-
-extern void init_generator(void);
-extern void clean_up_generator(void);
-
 extern void add(void);
 extern void sub(void);
 extern void mult(void);
-extern void div(void);
+extern void divide(void);
 
 extern void less(void);
 extern void lesseq(void);

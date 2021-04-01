@@ -6,6 +6,7 @@
 #define TIGY_TYPES_H
 
 #include "util/array.h"
+#include "front-end/syntax/token.h"
 
 struct type {
 	enum type_kind {
@@ -18,6 +19,15 @@ struct type {
 	void *data;
 };
 
+struct record {
+	struct array *fields;
+};
+
+struct field {
+	char *identifier;
+	struct type *type;
+};
+
 struct variable {
 	struct type *type;
 	void *data;
@@ -25,6 +35,7 @@ struct variable {
 
 struct function {
 	struct array *fields;
+	struct type *return_type;
 	struct scope *scope;
 };
 

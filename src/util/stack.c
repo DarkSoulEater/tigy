@@ -30,6 +30,12 @@ bool stack_is_empty(struct stack *stack)
 	return stack->size == 0;
 }
 
+void *stack_peak(struct stack *stack)
+{
+	assert(stack != NULL && stack->data != NULL);
+	return stack->data->value;
+}
+
 void stack_push(struct stack *stack, void *value)
 {
 	assert(stack != NULL);
