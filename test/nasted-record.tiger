@@ -1,0 +1,8 @@
+let
+    type vector = {
+        X : float,
+        Y : float
+    }
+
+    var Vec : vector := 10
+in 1 end
