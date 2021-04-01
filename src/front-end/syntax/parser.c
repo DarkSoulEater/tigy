@@ -292,7 +292,7 @@ static void parse_function_parameter(struct array *fields)
 		if (source_file->is_correct && scope_lookup_variable(program_current_scope(program), identifier.value.identifier) != NULL)
 			print_error(source_file, identifier.line, identifier.column,
 				"function has parameters with the same name '%s'", identifier.value.identifier);
-		else
+		if (source_file->is_correct)
 			scope_insert_variable(program_current_scope(program), identifier.value.identifier, variable);
 		if (field == NULL)
 			print_error(source_file, type_identifier.line, type_identifier.column,
@@ -435,7 +435,7 @@ static void parse_while_expression(void)
 	struct type *type;
 	if (source_file->is_correct) {
 		type = stack_pop(expression_types);
-		if (type->kind != INT)
+		if (type == NULL && type->kind != INT)
 			print_error(source_file, current_token.line, current_token.column,
 				"'while' expression must be an integer");
 	}
@@ -458,7 +458,7 @@ static void parse_for_expression(void)
 	struct type *type;
 	if (source_file->is_correct) {
 		type = stack_pop(expression_types);
-		if (type->kind != INT)
+		if (type == NULL && type->kind != INT)
 			print_error(source_file, current_token.line, current_token.column,
 				"'for' expression must be an integer");
 	}
@@ -466,7 +466,7 @@ static void parse_for_expression(void)
 	parse_expression();
 	if (source_file->is_correct) {
 		type = stack_pop(expression_types);
-		if (type->kind != INT)
+		if (type == NULL && type->kind != INT)
 			print_error(source_file, current_token.line, current_token.column,
 				"'for' expression must be an integer");
 	}
@@ -584,8 +584,7 @@ static void parse_identifier(struct token identifier)
 			}
 		}
 		break;
-	default:
-		if (source_file->is_correct) {
+	default: if (source_file->is_correct) {
 			if (variable == NULL)
 				print_error(source_file, identifier.line, identifier.column,
 					"use of undeclared variable '%s'", identifier.value.identifier);

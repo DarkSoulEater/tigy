@@ -62,11 +62,8 @@ void check_algebraic_operation(struct source_file *file, struct token operation)
 	}
 	if (!is_algebraic(rhs) || !is_algebraic(lhs))
                 print_error(file, operation.line, operation.column,"invalid algebraic operator operands type");
-        else {
-        	if (lhs->kind == FLOAT)
-        		rhs->kind = FLOAT;
-        	stack_push(expression_types, rhs);
-        }
+	else
+        	stack_push(expression_types, lhs->kind == FLOAT || rhs->kind == FLOAT ? float_type : int_type);
 }
 
 void check_comparison_operation(struct source_file *file, struct token operation)
@@ -81,17 +78,13 @@ void check_comparison_operation(struct source_file *file, struct token operation
 	if (operation.name == EQUAL || operation.name == NOT_EQUAL) {
 		if (!(is_algebraic(lhs) && is_algebraic(rhs) || lhs == rhs))
 			print_error(file, operation.line, operation.column,"invalid equality operator operands type");
-		else {
-			rhs->kind = INT;
-			stack_push(expression_types, rhs);
-		}
+		else
+			stack_push(expression_types, int_type);
         } else if ((!is_algebraic(rhs) || !is_algebraic(lhs))
         	&& (lhs->kind != STRING || rhs->kind != STRING)) {
                 print_error(file, operation.line, operation.column,"invalid comparison operator operands type");
-        } else {
-		rhs->kind = INT;
-		stack_push(expression_types, rhs);
-	}
+        } else
+		stack_push(expression_types, int_type);
 }
 
 void check_logical_operation(struct source_file *file, struct token operation)
@@ -105,10 +98,8 @@ void check_logical_operation(struct source_file *file, struct token operation)
 	}
         if (!is_algebraic(rhs) || !is_algebraic(lhs))
                 print_error(file, operation.line, operation.column,"invalid logical operator operands type");
-        else {
-        	rhs->kind = INT;
-		stack_push(expression_types, rhs);
-	}
+        else
+		stack_push(expression_types, int_type);
 }
 
 void check_assignment_operation(struct source_file *file, struct token operation) {
