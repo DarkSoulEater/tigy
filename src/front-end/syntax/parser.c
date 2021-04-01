@@ -109,12 +109,12 @@ static void parse_expression_list(enum token_kind end, struct token function_ide
 	} else {
 		int i;
 		for (i = 0; parse_expression(), current_token.name == COMMA; i++) {
-			if (source_file->is_correct && ((struct field *) array_at_index(function->fields, i))->type != stack_pop(expression_types))
+			if (source_file->is_correct && i < array_size(function->fields) && ((struct field *) array_at_index(function->fields, i))->type != stack_pop(expression_types))
 				print_error(source_file, function_identifier.line, function_identifier.column,
 					"function '%s' arguments and parameters does not match", function_identifier.value.identifier);
 			current_token = get_token(source_file);
 		}
-		if (source_file->is_correct && ((struct field *) array_at_index(function->fields, i))->type != stack_pop(expression_types))
+		if (source_file->is_correct && i < array_size(function->fields) && ((struct field *) array_at_index(function->fields, i))->type != stack_pop(expression_types))
 			print_error(source_file, function_identifier.line, function_identifier.column,
 				"function '%s' arguments and parameters does not match", function_identifier.value.identifier);
 		if (source_file->is_correct && array_size(function->fields) != i + 1)
@@ -191,7 +191,7 @@ static void parse_type_field(struct record *record)
 		field->type = scope_deep_lookup_type(program_current_scope(program), identifier.value.identifier);
 		if (field->type == NULL)
 			print_error(source_file, identifier.line, identifier.column,
-				"use of undeclared type '%s'", identifier.value.identifier);
+				"use of undeclared field type '%s'", identifier.value.identifier);
 		array_push_back(record->fields, field);
 	}
 }
