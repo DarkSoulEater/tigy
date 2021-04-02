@@ -1,0 +1,11 @@
+let
+    type rec = {
+        a : int,
+        b : int
+    }
+
+    var obj  := rec{a = 0, b = 0}
+
+    function a(b : int) = 10
+
+in a(obj) end

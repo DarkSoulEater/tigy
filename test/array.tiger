@@ -1,0 +1,12 @@
+let
+    type arrFloat = array of float
+    type arrArrFloat = array of arrFloat
+    type arrArrArrFloat = array of arrArrFloat
+
+    var f := 10
+    var N := 10
+
+    var arr1 := arrFloat[N] of 10
+    var arr2 := arrArrFloat[N] of arr1
+    var arr3 := arrArrArrFloat[N] of arr2
+in arr3 end

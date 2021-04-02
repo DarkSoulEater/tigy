@@ -1,0 +1,11 @@
+let
+    function mod(a : int, b : int) = a - (a / b) * b
+
+
+    function swap(a : int, b : int) =
+        let
+            var c : int := a
+        in a = b; b = c end
+
+    function gcd(a : int, b : int) = (a := mod(a, b); swap(a, b))
+in gcd(1232, 12532) end
