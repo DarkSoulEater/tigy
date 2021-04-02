@@ -175,6 +175,14 @@ static void parse_field_list(enum token_kind end, struct token record_identifier
 		stack_push(expression_types, scope_deep_lookup_type(program_current_scope(program), record_identifier.value.identifier));
 }
 
+static struct type *find_field_type(struct record *record, const char *field)
+{
+	for (int i = 0; i < array_size(record->fields); i++)
+		if (strcmp(((struct field *) array_at_index(record->fields, i))->identifier, field) == 0)
+			return ((struct field *) array_at_index(record->fields, i))->type;
+	return NULL;
+}
+
 static void parse_type_field(struct record *record)
 {
 	struct field *field = malloc(sizeof(struct field));
@@ -183,6 +191,9 @@ static void parse_type_field(struct record *record)
 	if (source_file->is_correct) {
 		field->identifier = malloc(sizeof(char[IDENTIFIER_LENGTH]));
 		strcpy(field->identifier, identifier.value.identifier);
+		if (find_field_type(record, field->identifier) != NULL)
+			print_error(source_file, identifier.line, identifier.column,
+				"record has fields with the same name '%s'", identifier.value.identifier);
 	}
 	parse_next_token(COLON);
 	identifier = current_token;
@@ -488,14 +499,6 @@ static void parse_let_expression(void)
 	parse_expression_sequence(END_KEYWORD);
 	if (source_file->is_correct)
 		program_end_scope(program);
-}
-
-static struct type *find_field_type(struct record *record, const char *field)
-{
-	for (int i = 0; i < array_size(record->fields); i++)
-		if (strcmp(((struct field *) array_at_index(record->fields, i))->identifier, field) == 0)
-			return ((struct field *) array_at_index(record->fields, i))->type;
-	return NULL;
 }
 
 static void parse_lvalue_suffix(struct token identifier)
