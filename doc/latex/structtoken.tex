@@ -1,0 +1,159 @@
+\hypertarget{structtoken}{}\doxysection{token Struct Reference}
+\label{structtoken}\index{token@{token}}
+\doxysubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{structtoken_a6ef1c0d6dc4cb60cf73959d4afd711cc}{token\+\_\+kind}} \{ \newline
+\mbox{\hyperlink{structtoken_a6ef1c0d6dc4cb60cf73959d4afd711ccac157bdf0b85a40d2619cbc8bc1ae5fe2}{NONE}}
+, {\bfseries IDENTIFIER}
+, {\bfseries INTEGER\+\_\+\+CONSTANT}
+, {\bfseries STRING\+\_\+\+CONSTANT}
+, \newline
+{\bfseries FLOAT\+\_\+\+CONSTANT}
+, {\bfseries ARRAY\+\_\+\+KEYWORD}
+, {\bfseries BREAK\+\_\+\+KEYWORD}
+, {\bfseries DO\+\_\+\+KEYWORD}
+, \newline
+{\bfseries ELSE\+\_\+\+KEYWORD}
+, {\bfseries END\+\_\+\+KEYWORD}
+, {\bfseries FOR\+\_\+\+KEYWORD}
+, {\bfseries FUNCTION\+\_\+\+KEYWORD}
+, \newline
+{\bfseries IF\+\_\+\+KEYWORD}
+, {\bfseries IN\+\_\+\+KEYWORD}
+, {\bfseries LET\+\_\+\+KEYWORD}
+, {\bfseries OF\+\_\+\+KEYWORD}
+, \newline
+{\bfseries THEN\+\_\+\+KEYWORD}
+, {\bfseries TO\+\_\+\+KEYWORD}
+, {\bfseries TYPE\+\_\+\+KEYWORD}
+, {\bfseries VAR\+\_\+\+KEYWORD}
+, \newline
+{\bfseries WHILE\+\_\+\+KEYWORD}
+, {\bfseries COMMA}
+, {\bfseries COLON}
+, {\bfseries SEMICOLON}
+, \newline
+{\bfseries LEFT\+\_\+\+PARENTHESIS}
+, {\bfseries RIGHT\+\_\+\+PARENTHESIS}
+, {\bfseries LEFT\+\_\+\+BRACKET}
+, {\bfseries RIGHT\+\_\+\+BRACKET}
+, \newline
+{\bfseries LEFT\+\_\+\+BRACE}
+, {\bfseries RIGHT\+\_\+\+BRACE}
+, {\bfseries DOT}
+, {\bfseries PLUS}
+, \newline
+{\bfseries MINUS}
+, {\bfseries ASTERISK}
+, {\bfseries SLASH}
+, {\bfseries EQUAL}
+, \newline
+{\bfseries NOT\+\_\+\+EQUAL}
+, {\bfseries LESS}
+, {\bfseries LESS\+\_\+\+EQUAL}
+, {\bfseries GREATER}
+, \newline
+{\bfseries GREATER\+\_\+\+EQUAL}
+, {\bfseries AND}
+, {\bfseries OR}
+, {\bfseries ASSIGNMENT}
+ \}
+\begin{DoxyCompactList}\small\item\em A set of possible token types. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structtoken_ace23100f5d8d23e3c864e722ddc0357c}\label{structtoken_ace23100f5d8d23e3c864e722ddc0357c}} 
+enum \mbox{\hyperlink{structtoken_a6ef1c0d6dc4cb60cf73959d4afd711cc}{token\+::token\+\_\+kind}} {\bfseries name}
+\item 
+\mbox{\Hypertarget{structtoken_adda27f42868e50c37a6a5f8e881c9495}\label{structtoken_adda27f42868e50c37a6a5f8e881c9495}} 
+\begin{tabbing}
+xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=\kill
+union \{\\
+\>char {\bfseries identifier} \mbox{[}IDENTIFIER\_LENGTH\mbox{]}\\
+\>int {\bfseries integer\_constant}\\
+\>float {\bfseries float\_constant}\\
+\>char {\bfseries string\_constant} \mbox{[}STRING\_CONSTANT\_LENGTH\mbox{]}\\
+\} {\bfseries value}\\
+
+\end{tabbing}\item 
+\mbox{\Hypertarget{structtoken_a41ebd28ef1d7c6ade45642cb6acc1039}\label{structtoken_a41ebd28ef1d7c6ade45642cb6acc1039}} 
+int {\bfseries line}
+\item 
+\mbox{\Hypertarget{structtoken_a60dae4c6e78188cd718b696e4f08fc71}\label{structtoken_a60dae4c6e78188cd718b696e4f08fc71}} 
+int {\bfseries column}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Enumeration Documentation}
+\mbox{\Hypertarget{structtoken_a6ef1c0d6dc4cb60cf73959d4afd711cc}\label{structtoken_a6ef1c0d6dc4cb60cf73959d4afd711cc}} 
+\index{token@{token}!token\_kind@{token\_kind}}
+\index{token\_kind@{token\_kind}!token@{token}}
+\doxysubsubsection{\texorpdfstring{token\_kind}{token\_kind}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{structtoken_a6ef1c0d6dc4cb60cf73959d4afd711cc}{token\+\_\+kind}}}
+
+
+
+A set of possible token types. 
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{NONE@{NONE}!token@{token}}\index{token@{token}!NONE@{NONE}}}\mbox{\Hypertarget{structtoken_a6ef1c0d6dc4cb60cf73959d4afd711ccac157bdf0b85a40d2619cbc8bc1ae5fe2}\label{structtoken_a6ef1c0d6dc4cb60cf73959d4afd711ccac157bdf0b85a40d2619cbc8bc1ae5fe2}} 
+NONE&Does not exist. \\
+\hline
+
+\end{DoxyEnumFields}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{13                         \{}
+\DoxyCodeLine{14             \mbox{\hyperlink{structtoken_a6ef1c0d6dc4cb60cf73959d4afd711ccac157bdf0b85a40d2619cbc8bc1ae5fe2}{NONE}}, }
+\DoxyCodeLine{15             IDENTIFIER,}
+\DoxyCodeLine{16         INTEGER\_CONSTANT,}
+\DoxyCodeLine{17         STRING\_CONSTANT,}
+\DoxyCodeLine{18         FLOAT\_CONSTANT,}
+\DoxyCodeLine{19             ARRAY\_KEYWORD,}
+\DoxyCodeLine{20             BREAK\_KEYWORD,}
+\DoxyCodeLine{21             DO\_KEYWORD,}
+\DoxyCodeLine{22             ELSE\_KEYWORD,}
+\DoxyCodeLine{23             END\_KEYWORD,}
+\DoxyCodeLine{24             FOR\_KEYWORD,}
+\DoxyCodeLine{25             FUNCTION\_KEYWORD,}
+\DoxyCodeLine{26             IF\_KEYWORD,}
+\DoxyCodeLine{27             IN\_KEYWORD,}
+\DoxyCodeLine{28             LET\_KEYWORD,}
+\DoxyCodeLine{29             OF\_KEYWORD,}
+\DoxyCodeLine{30             THEN\_KEYWORD,}
+\DoxyCodeLine{31             TO\_KEYWORD,}
+\DoxyCodeLine{32             TYPE\_KEYWORD,}
+\DoxyCodeLine{33             VAR\_KEYWORD,}
+\DoxyCodeLine{34             WHILE\_KEYWORD,}
+\DoxyCodeLine{35             COMMA,}
+\DoxyCodeLine{36             COLON,}
+\DoxyCodeLine{37             SEMICOLON,}
+\DoxyCodeLine{38             LEFT\_PARENTHESIS,}
+\DoxyCodeLine{39             RIGHT\_PARENTHESIS,}
+\DoxyCodeLine{40             LEFT\_BRACKET,}
+\DoxyCodeLine{41             RIGHT\_BRACKET,}
+\DoxyCodeLine{42             LEFT\_BRACE,}
+\DoxyCodeLine{43             RIGHT\_BRACE,}
+\DoxyCodeLine{44             DOT,}
+\DoxyCodeLine{45             PLUS,}
+\DoxyCodeLine{46             MINUS,}
+\DoxyCodeLine{47             ASTERISK,}
+\DoxyCodeLine{48             SLASH,}
+\DoxyCodeLine{49             EQUAL,}
+\DoxyCodeLine{50             NOT\_EQUAL,}
+\DoxyCodeLine{51             LESS,}
+\DoxyCodeLine{52             LESS\_EQUAL,}
+\DoxyCodeLine{53             GREATER,}
+\DoxyCodeLine{54             GREATER\_EQUAL,}
+\DoxyCodeLine{55             AND,}
+\DoxyCodeLine{56             OR,}
+\DoxyCodeLine{57             ASSIGNMENT,}
+\DoxyCodeLine{58         \} name;}
+
+\end{DoxyCode}
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/eleno/\+CLion\+Projects/tigy/src/front-\/end/syntax/token.\+h\end{DoxyCompactItemize}

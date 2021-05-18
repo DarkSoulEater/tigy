@@ -1,0 +1,148 @@
+\hypertarget{hash-table_8h}{}\doxysection{C\+:/\+Users/eleno/\+CLion\+Projects/tigy/src/util/hash-\/table.h File Reference}
+\label{hash-table_8h}\index{C:/Users/eleno/CLionProjects/tigy/src/util/hash-\/table.h@{C:/Users/eleno/CLionProjects/tigy/src/util/hash-\/table.h}}
+
+
+Hash Table.  
+
+
+{\ttfamily \#include \char`\"{}front-\/end/syntax/token.\+h\char`\"{}}\newline
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structhash__table}{hash\+\_\+table}} $\ast$ \mbox{\hyperlink{hash-table_8h_a31be9c317ea4c2093d054d48a6e73cc6}{table\+\_\+allocate}} (void)
+\item 
+void $\ast$ \mbox{\hyperlink{hash-table_8h_a0a09b70791920529027356b52f76023f}{table\+\_\+lookup}} (struct \mbox{\hyperlink{structhash__table}{hash\+\_\+table}} $\ast$table, const char $\ast$key)
+\item 
+void \mbox{\hyperlink{hash-table_8h_a4a9344afffcfa3b48b72d881b7691254}{table\+\_\+insert}} (struct \mbox{\hyperlink{structhash__table}{hash\+\_\+table}} $\ast$table, const char $\ast$key, void $\ast$value)
+\item 
+void \mbox{\hyperlink{hash-table_8h_a6c6d8a53596f30f38318717902fdd476}{table\+\_\+free}} (struct \mbox{\hyperlink{structhash__table}{hash\+\_\+table}} $\ast$$\ast$table)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Hash Table. 
+
+This file have... 
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{hash-table_8h_a31be9c317ea4c2093d054d48a6e73cc6}\label{hash-table_8h_a31be9c317ea4c2093d054d48a6e73cc6}} 
+\index{hash-\/table.h@{hash-\/table.h}!table\_allocate@{table\_allocate}}
+\index{table\_allocate@{table\_allocate}!hash-\/table.h@{hash-\/table.h}}
+\doxysubsubsection{\texorpdfstring{table\_allocate()}{table\_allocate()}}
+{\footnotesize\ttfamily struct \mbox{\hyperlink{structhash__table}{hash\+\_\+table}}$\ast$ table\+\_\+allocate (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+Allocate table
+
+
+\begin{DoxyParams}{Parameters}
+{\em None} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Allocate tb 
+\end{DoxyReturn}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{61 \{}
+\DoxyCodeLine{62         \textcolor{keyword}{struct }\mbox{\hyperlink{structhash__table}{hash\_table}}* table = malloc(\textcolor{keyword}{sizeof}(\textcolor{keyword}{struct} \mbox{\hyperlink{structhash__table}{hash\_table}}));}
+\DoxyCodeLine{63         table-\/>buffer\_size = DEFAULT\_SIZE;}
+\DoxyCodeLine{64         table-\/>size = 0;}
+\DoxyCodeLine{65         table-\/>data = malloc(\textcolor{keyword}{sizeof}(\textcolor{keyword}{struct} binding *) * table-\/>buffer\_size);}
+\DoxyCodeLine{66         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 0; i < table-\/>buffer\_size; i++) \{}
+\DoxyCodeLine{67                 table-\/>data[i] = NULL;}
+\DoxyCodeLine{68         \}}
+\DoxyCodeLine{69         \textcolor{keywordflow}{return} table;}
+\DoxyCodeLine{70 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{hash-table_8h_a6c6d8a53596f30f38318717902fdd476}\label{hash-table_8h_a6c6d8a53596f30f38318717902fdd476}} 
+\index{hash-\/table.h@{hash-\/table.h}!table\_free@{table\_free}}
+\index{table\_free@{table\_free}!hash-\/table.h@{hash-\/table.h}}
+\doxysubsubsection{\texorpdfstring{table\_free()}{table\_free()}}
+{\footnotesize\ttfamily void table\+\_\+free (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structhash__table}{hash\+\_\+table}} $\ast$$\ast$}]{table }\end{DoxyParamCaption})}
+
+
+\begin{DoxyParams}{Parameters}
+{\em table} & \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{105 \{}
+\DoxyCodeLine{106     assert(table != NULL \&\& *table != NULL);}
+\DoxyCodeLine{107         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 0; i < (*table)-\/>buffer\_size; i++)}
+\DoxyCodeLine{108                 \textcolor{keywordflow}{if} ((*table)-\/>data != NULL)}
+\DoxyCodeLine{109                         free((*table)-\/>data[i]);}
+\DoxyCodeLine{110         free((*table)-\/>data);}
+\DoxyCodeLine{111         free(*table);}
+\DoxyCodeLine{112         *table = NULL;}
+\DoxyCodeLine{113 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{hash-table_8h_a4a9344afffcfa3b48b72d881b7691254}\label{hash-table_8h_a4a9344afffcfa3b48b72d881b7691254}} 
+\index{hash-\/table.h@{hash-\/table.h}!table\_insert@{table\_insert}}
+\index{table\_insert@{table\_insert}!hash-\/table.h@{hash-\/table.h}}
+\doxysubsubsection{\texorpdfstring{table\_insert()}{table\_insert()}}
+{\footnotesize\ttfamily void table\+\_\+insert (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structhash__table}{hash\+\_\+table}} $\ast$}]{table,  }\item[{const char $\ast$}]{key,  }\item[{void $\ast$}]{value }\end{DoxyParamCaption})}
+
+
+\begin{DoxyParams}{Parameters}
+{\em table} & \\
+\hline
+{\em key} & \\
+\hline
+{\em value} & \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{88 \{}
+\DoxyCodeLine{89         assert(table != NULL \&\& key != NULL \&\& value != NULL);}
+\DoxyCodeLine{90         \textcolor{keywordflow}{if} (table-\/>size == table-\/>buffer\_size)}
+\DoxyCodeLine{91                 resize(table);}
+\DoxyCodeLine{92         \textcolor{keywordtype}{int} index = get\_hash\_index(key, table-\/>buffer\_size);}
+\DoxyCodeLine{93         \textcolor{keywordtype}{int} step = get\_hash\_step(key, table-\/>buffer\_size);}
+\DoxyCodeLine{94         \textcolor{keywordflow}{while} (table-\/>data[index] != NULL) \{}
+\DoxyCodeLine{95                 assert(strcmp(table-\/>data[index]-\/>key, key) != 0);}
+\DoxyCodeLine{96                 index = (index + step) \% table-\/>buffer\_size;}
+\DoxyCodeLine{97         \}}
+\DoxyCodeLine{98         table-\/>data[index] = malloc(\textcolor{keyword}{sizeof}(\textcolor{keyword}{struct} binding));}
+\DoxyCodeLine{99         strcpy(table-\/>data[index]-\/>key, key);}
+\DoxyCodeLine{100         table-\/>data[index]-\/>value = value;}
+\DoxyCodeLine{101         table-\/>size++;}
+\DoxyCodeLine{102 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{hash-table_8h_a0a09b70791920529027356b52f76023f}\label{hash-table_8h_a0a09b70791920529027356b52f76023f}} 
+\index{hash-\/table.h@{hash-\/table.h}!table\_lookup@{table\_lookup}}
+\index{table\_lookup@{table\_lookup}!hash-\/table.h@{hash-\/table.h}}
+\doxysubsubsection{\texorpdfstring{table\_lookup()}{table\_lookup()}}
+{\footnotesize\ttfamily void$\ast$ table\+\_\+lookup (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structhash__table}{hash\+\_\+table}} $\ast$}]{table,  }\item[{const char $\ast$}]{key }\end{DoxyParamCaption})}
+
+
+\begin{DoxyParams}{Parameters}
+{\em table} & \\
+\hline
+{\em key} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{73 \{}
+\DoxyCodeLine{74         assert(table != NULL \&\& key != NULL);}
+\DoxyCodeLine{75         \textcolor{keywordtype}{int} index = get\_hash\_index(key, table-\/>buffer\_size);}
+\DoxyCodeLine{76         \textcolor{keywordtype}{int} step = get\_hash\_step(key, table-\/>buffer\_size);}
+\DoxyCodeLine{77         \textcolor{keywordtype}{int} step\_count = 0;}
+\DoxyCodeLine{78         \textcolor{keywordflow}{while} (table-\/>data[index] != NULL \&\& step\_count < table-\/>buffer\_size) \{}
+\DoxyCodeLine{79                 \textcolor{keywordflow}{if} (strcmp(key, table-\/>data[index]-\/>key) == 0)}
+\DoxyCodeLine{80                         \textcolor{keywordflow}{return} table-\/>data[index]-\/>value;}
+\DoxyCodeLine{81                 index = (index + step) \% table-\/>buffer\_size;}
+\DoxyCodeLine{82                 step\_count++;}
+\DoxyCodeLine{83         \}}
+\DoxyCodeLine{84         \textcolor{keywordflow}{return} NULL;}
+\DoxyCodeLine{85 \}}
+
+\end{DoxyCode}

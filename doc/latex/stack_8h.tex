@@ -1,0 +1,158 @@
+\hypertarget{stack_8h}{}\doxysection{C\+:/\+Users/eleno/\+CLion\+Projects/tigy/src/util/stack.h File Reference}
+\label{stack_8h}\index{C:/Users/eleno/CLionProjects/tigy/src/util/stack.h@{C:/Users/eleno/CLionProjects/tigy/src/util/stack.h}}
+{\ttfamily \#include $<$stdbool.\+h$>$}\newline
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structstack}{stack}} $\ast$ \mbox{\hyperlink{stack_8h_a6e61f217d5535aa8781c84948a88f3dd}{stack\+\_\+allocate}} (void)
+\item 
+bool \mbox{\hyperlink{stack_8h_ae9a6945b6af8d59621271635547248a3}{stack\+\_\+is\+\_\+empty}} (struct \mbox{\hyperlink{structstack}{stack}} $\ast$\mbox{\hyperlink{structstack}{stack}})
+\item 
+void $\ast$ \mbox{\hyperlink{stack_8h_a99584b2fcc2f6dd77f1301a3ee30fc18}{stack\+\_\+peak}} (struct \mbox{\hyperlink{structstack}{stack}} $\ast$\mbox{\hyperlink{structstack}{stack}})
+\item 
+void \mbox{\hyperlink{stack_8h_a096cd8132ed2c1cc1680ef20fe704e40}{stack\+\_\+push}} (struct \mbox{\hyperlink{structstack}{stack}} $\ast$\mbox{\hyperlink{structstack}{stack}}, void $\ast$value)
+\item 
+void $\ast$ \mbox{\hyperlink{stack_8h_a7eb7cee001e5a11b36ff8a112f571a4d}{stack\+\_\+pop}} (struct \mbox{\hyperlink{structstack}{stack}} $\ast$\mbox{\hyperlink{structstack}{stack}})
+\item 
+void \mbox{\hyperlink{stack_8h_a0fdff3bfc35aa1ea8b36e4f889f157fa}{stack\+\_\+free}} (struct \mbox{\hyperlink{structstack}{stack}} $\ast$$\ast$\mbox{\hyperlink{structstack}{stack}})
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{stack_8h_a6e61f217d5535aa8781c84948a88f3dd}\label{stack_8h_a6e61f217d5535aa8781c84948a88f3dd}} 
+\index{stack.h@{stack.h}!stack\_allocate@{stack\_allocate}}
+\index{stack\_allocate@{stack\_allocate}!stack.h@{stack.h}}
+\doxysubsubsection{\texorpdfstring{stack\_allocate()}{stack\_allocate()}}
+{\footnotesize\ttfamily struct \mbox{\hyperlink{structstack}{stack}}$\ast$ stack\+\_\+allocate (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{20 \{}
+\DoxyCodeLine{21     \textcolor{keyword}{struct }\mbox{\hyperlink{structstack}{stack}} *\mbox{\hyperlink{structstack}{stack}} = malloc(\textcolor{keyword}{sizeof}(\textcolor{keyword}{struct} \mbox{\hyperlink{structstack}{stack}}));}
+\DoxyCodeLine{22     \mbox{\hyperlink{structstack}{stack}}-\/>size = 0;}
+\DoxyCodeLine{23     \mbox{\hyperlink{structstack}{stack}}-\/>data = NULL;}
+\DoxyCodeLine{24     \textcolor{keywordflow}{return} \mbox{\hyperlink{structstack}{stack}};}
+\DoxyCodeLine{25 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{stack_8h_a0fdff3bfc35aa1ea8b36e4f889f157fa}\label{stack_8h_a0fdff3bfc35aa1ea8b36e4f889f157fa}} 
+\index{stack.h@{stack.h}!stack\_free@{stack\_free}}
+\index{stack\_free@{stack\_free}!stack.h@{stack.h}}
+\doxysubsubsection{\texorpdfstring{stack\_free()}{stack\_free()}}
+{\footnotesize\ttfamily void stack\+\_\+free (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structstack}{stack}} $\ast$$\ast$}]{stack }\end{DoxyParamCaption})}
+
+
+\begin{DoxyParams}{Parameters}
+{\em stack} & \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{61 \{}
+\DoxyCodeLine{62     assert(\mbox{\hyperlink{structstack}{stack}} != NULL \&\& *\mbox{\hyperlink{structstack}{stack}} != NULL);}
+\DoxyCodeLine{63     \textcolor{keywordflow}{while} (!\mbox{\hyperlink{stack_8h_ae9a6945b6af8d59621271635547248a3}{stack\_is\_empty}}(*\mbox{\hyperlink{structstack}{stack}}))}
+\DoxyCodeLine{64         \mbox{\hyperlink{stack_8h_a7eb7cee001e5a11b36ff8a112f571a4d}{stack\_pop}}(*\mbox{\hyperlink{structstack}{stack}});}
+\DoxyCodeLine{65     free(*\mbox{\hyperlink{structstack}{stack}});}
+\DoxyCodeLine{66     *\mbox{\hyperlink{structstack}{stack}} = NULL;}
+\DoxyCodeLine{67 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{stack_8h_ae9a6945b6af8d59621271635547248a3}\label{stack_8h_ae9a6945b6af8d59621271635547248a3}} 
+\index{stack.h@{stack.h}!stack\_is\_empty@{stack\_is\_empty}}
+\index{stack\_is\_empty@{stack\_is\_empty}!stack.h@{stack.h}}
+\doxysubsubsection{\texorpdfstring{stack\_is\_empty()}{stack\_is\_empty()}}
+{\footnotesize\ttfamily bool stack\+\_\+is\+\_\+empty (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structstack}{stack}} $\ast$}]{stack }\end{DoxyParamCaption})}
+
+
+\begin{DoxyParams}{Parameters}
+{\em stack} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{28 \{}
+\DoxyCodeLine{29     assert(\mbox{\hyperlink{structstack}{stack}} != NULL);}
+\DoxyCodeLine{30     \textcolor{keywordflow}{return} \mbox{\hyperlink{structstack}{stack}}-\/>size == 0;}
+\DoxyCodeLine{31 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{stack_8h_a99584b2fcc2f6dd77f1301a3ee30fc18}\label{stack_8h_a99584b2fcc2f6dd77f1301a3ee30fc18}} 
+\index{stack.h@{stack.h}!stack\_peak@{stack\_peak}}
+\index{stack\_peak@{stack\_peak}!stack.h@{stack.h}}
+\doxysubsubsection{\texorpdfstring{stack\_peak()}{stack\_peak()}}
+{\footnotesize\ttfamily void$\ast$ stack\+\_\+peak (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structstack}{stack}} $\ast$}]{stack }\end{DoxyParamCaption})}
+
+
+\begin{DoxyParams}{Parameters}
+{\em stack} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{34 \{}
+\DoxyCodeLine{35     assert(\mbox{\hyperlink{structstack}{stack}} != NULL \&\& \mbox{\hyperlink{structstack}{stack}}-\/>data != NULL);}
+\DoxyCodeLine{36     \textcolor{keywordflow}{return} \mbox{\hyperlink{structstack}{stack}}-\/>data-\/>value;}
+\DoxyCodeLine{37 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{stack_8h_a7eb7cee001e5a11b36ff8a112f571a4d}\label{stack_8h_a7eb7cee001e5a11b36ff8a112f571a4d}} 
+\index{stack.h@{stack.h}!stack\_pop@{stack\_pop}}
+\index{stack\_pop@{stack\_pop}!stack.h@{stack.h}}
+\doxysubsubsection{\texorpdfstring{stack\_pop()}{stack\_pop()}}
+{\footnotesize\ttfamily void$\ast$ stack\+\_\+pop (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structstack}{stack}} $\ast$}]{stack }\end{DoxyParamCaption})}
+
+
+\begin{DoxyParams}{Parameters}
+{\em stack} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{50 \{}
+\DoxyCodeLine{51     assert(\mbox{\hyperlink{structstack}{stack}} != NULL \&\& \mbox{\hyperlink{structstack}{stack}}-\/>data != NULL);}
+\DoxyCodeLine{52     \textcolor{keyword}{struct }node *data = \mbox{\hyperlink{structstack}{stack}}-\/>data;}
+\DoxyCodeLine{53     \mbox{\hyperlink{structstack}{stack}}-\/>data = data-\/>link;}
+\DoxyCodeLine{54     \mbox{\hyperlink{structstack}{stack}}-\/>size-\/-\/;}
+\DoxyCodeLine{55     \textcolor{keywordtype}{void} *value = data-\/>value;}
+\DoxyCodeLine{56     free(data);}
+\DoxyCodeLine{57     \textcolor{keywordflow}{return} value;}
+\DoxyCodeLine{58 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{stack_8h_a096cd8132ed2c1cc1680ef20fe704e40}\label{stack_8h_a096cd8132ed2c1cc1680ef20fe704e40}} 
+\index{stack.h@{stack.h}!stack\_push@{stack\_push}}
+\index{stack\_push@{stack\_push}!stack.h@{stack.h}}
+\doxysubsubsection{\texorpdfstring{stack\_push()}{stack\_push()}}
+{\footnotesize\ttfamily void stack\+\_\+push (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structstack}{stack}} $\ast$}]{stack,  }\item[{void $\ast$}]{value }\end{DoxyParamCaption})}
+
+
+\begin{DoxyParams}{Parameters}
+{\em stack} & \\
+\hline
+{\em value} & \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{40 \{}
+\DoxyCodeLine{41     assert(\mbox{\hyperlink{structstack}{stack}} != NULL);}
+\DoxyCodeLine{42     \textcolor{keyword}{struct }node *data = malloc(\textcolor{keyword}{sizeof}(\textcolor{keyword}{struct} node));}
+\DoxyCodeLine{43     data-\/>value = value;}
+\DoxyCodeLine{44     data-\/>link = \mbox{\hyperlink{structstack}{stack}}-\/>data;}
+\DoxyCodeLine{45     \mbox{\hyperlink{structstack}{stack}}-\/>data = data;}
+\DoxyCodeLine{46     \mbox{\hyperlink{structstack}{stack}}-\/>size++;}
+\DoxyCodeLine{47 \}}
+
+\end{DoxyCode}

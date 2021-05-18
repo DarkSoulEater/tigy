@@ -9,8 +9,9 @@
 #define STRING_CONSTANT_LENGTH 128
 
 struct token {
+        /// A set of possible token types
         enum token_kind {
-        	NONE,
+        	NONE, ///< Does not exist
         	IDENTIFIER,
 		INTEGER_CONSTANT,
 		STRING_CONSTANT,

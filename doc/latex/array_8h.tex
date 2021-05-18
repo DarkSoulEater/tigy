@@ -1,0 +1,179 @@
+\hypertarget{array_8h}{}\doxysection{C\+:/\+Users/eleno/\+CLion\+Projects/tigy/src/util/array.h File Reference}
+\label{array_8h}\index{C:/Users/eleno/CLionProjects/tigy/src/util/array.h@{C:/Users/eleno/CLionProjects/tigy/src/util/array.h}}
+{\ttfamily \#include $<$stdbool.\+h$>$}\newline
+{\ttfamily \#include $<$stddef.\+h$>$}\newline
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structarray}{array}} $\ast$ \mbox{\hyperlink{array_8h_aedab68e229d3917de051df2e51a5a552}{array\+\_\+allocate}} (void)
+\item 
+void \mbox{\hyperlink{array_8h_a14033c1f14af61127ff7167611596987}{array\+\_\+push\+\_\+back}} (struct \mbox{\hyperlink{structarray}{array}} $\ast$\mbox{\hyperlink{structarray}{array}}, void $\ast$value)
+\item 
+void $\ast$ \mbox{\hyperlink{array_8h_a4650b12508eae764449d257563de9bb2}{array\+\_\+pop\+\_\+back}} (struct \mbox{\hyperlink{structarray}{array}} $\ast$\mbox{\hyperlink{structarray}{array}})
+\item 
+void $\ast$ \mbox{\hyperlink{array_8h_aedde3f04ec3fcdd2ce5980faadd5771b}{array\+\_\+at\+\_\+index}} (struct \mbox{\hyperlink{structarray}{array}} $\ast$\mbox{\hyperlink{structarray}{array}}, size\+\_\+t index)
+\item 
+size\+\_\+t \mbox{\hyperlink{array_8h_a989fb85dde301bae8352bc49c7cd3771}{array\+\_\+size}} (struct \mbox{\hyperlink{structarray}{array}} $\ast$\mbox{\hyperlink{structarray}{array}})
+\item 
+bool \mbox{\hyperlink{array_8h_a60aa872f478348b2f556484a5583d171}{array\+\_\+is\+\_\+empty}} (struct \mbox{\hyperlink{structarray}{array}} $\ast$\mbox{\hyperlink{structarray}{array}})
+\item 
+void \mbox{\hyperlink{array_8h_a328cf05211ec8f506d421f5a3d88deb2}{array\+\_\+free}} (struct \mbox{\hyperlink{structarray}{array}} $\ast$$\ast$\mbox{\hyperlink{structarray}{array}})
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{array_8h_aedab68e229d3917de051df2e51a5a552}\label{array_8h_aedab68e229d3917de051df2e51a5a552}} 
+\index{array.h@{array.h}!array\_allocate@{array\_allocate}}
+\index{array\_allocate@{array\_allocate}!array.h@{array.h}}
+\doxysubsubsection{\texorpdfstring{array\_allocate()}{array\_allocate()}}
+{\footnotesize\ttfamily struct \mbox{\hyperlink{structarray}{array}}$\ast$ array\+\_\+allocate (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{18 \{}
+\DoxyCodeLine{19     \textcolor{keyword}{struct }\mbox{\hyperlink{structarray}{array}} *\mbox{\hyperlink{structarray}{array}} = malloc(\textcolor{keyword}{sizeof}(\textcolor{keyword}{struct} \mbox{\hyperlink{structarray}{array}}));}
+\DoxyCodeLine{20     \mbox{\hyperlink{structarray}{array}}-\/>size = \mbox{\hyperlink{structarray}{array}}-\/>capacity = 0;}
+\DoxyCodeLine{21     \mbox{\hyperlink{structarray}{array}}-\/>data = NULL;}
+\DoxyCodeLine{22     \textcolor{keywordflow}{return} \mbox{\hyperlink{structarray}{array}};}
+\DoxyCodeLine{23 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{array_8h_aedde3f04ec3fcdd2ce5980faadd5771b}\label{array_8h_aedde3f04ec3fcdd2ce5980faadd5771b}} 
+\index{array.h@{array.h}!array\_at\_index@{array\_at\_index}}
+\index{array\_at\_index@{array\_at\_index}!array.h@{array.h}}
+\doxysubsubsection{\texorpdfstring{array\_at\_index()}{array\_at\_index()}}
+{\footnotesize\ttfamily void$\ast$ array\+\_\+at\+\_\+index (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structarray}{array}} $\ast$}]{array,  }\item[{size\+\_\+t}]{index }\end{DoxyParamCaption})}
+
+
+\begin{DoxyParams}{Parameters}
+{\em array} & \\
+\hline
+{\em index} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{42 \{}
+\DoxyCodeLine{43     assert(\mbox{\hyperlink{structarray}{array}} != NULL \&\& index < array-\/>size);}
+\DoxyCodeLine{44     \textcolor{keywordflow}{return} \mbox{\hyperlink{structarray}{array}}-\/>data[index];}
+\DoxyCodeLine{45 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{array_8h_a328cf05211ec8f506d421f5a3d88deb2}\label{array_8h_a328cf05211ec8f506d421f5a3d88deb2}} 
+\index{array.h@{array.h}!array\_free@{array\_free}}
+\index{array\_free@{array\_free}!array.h@{array.h}}
+\doxysubsubsection{\texorpdfstring{array\_free()}{array\_free()}}
+{\footnotesize\ttfamily void array\+\_\+free (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structarray}{array}} $\ast$$\ast$}]{array }\end{DoxyParamCaption})}
+
+
+\begin{DoxyParams}{Parameters}
+{\em array} & \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{60 \{}
+\DoxyCodeLine{61     assert(\mbox{\hyperlink{structarray}{array}} != NULL \&\& *\mbox{\hyperlink{structarray}{array}} != NULL);}
+\DoxyCodeLine{62     free((*array)-\/>data);}
+\DoxyCodeLine{63     free(*\mbox{\hyperlink{structarray}{array}});}
+\DoxyCodeLine{64     *\mbox{\hyperlink{structarray}{array}} = NULL;}
+\DoxyCodeLine{65 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{array_8h_a60aa872f478348b2f556484a5583d171}\label{array_8h_a60aa872f478348b2f556484a5583d171}} 
+\index{array.h@{array.h}!array\_is\_empty@{array\_is\_empty}}
+\index{array\_is\_empty@{array\_is\_empty}!array.h@{array.h}}
+\doxysubsubsection{\texorpdfstring{array\_is\_empty()}{array\_is\_empty()}}
+{\footnotesize\ttfamily bool array\+\_\+is\+\_\+empty (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structarray}{array}} $\ast$}]{array }\end{DoxyParamCaption})}
+
+
+\begin{DoxyParams}{Parameters}
+{\em array} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{54 \{}
+\DoxyCodeLine{55     assert(\mbox{\hyperlink{structarray}{array}} != NULL);}
+\DoxyCodeLine{56     \textcolor{keywordflow}{return} \mbox{\hyperlink{structarray}{array}}-\/>size == 0;}
+\DoxyCodeLine{57 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{array_8h_a4650b12508eae764449d257563de9bb2}\label{array_8h_a4650b12508eae764449d257563de9bb2}} 
+\index{array.h@{array.h}!array\_pop\_back@{array\_pop\_back}}
+\index{array\_pop\_back@{array\_pop\_back}!array.h@{array.h}}
+\doxysubsubsection{\texorpdfstring{array\_pop\_back()}{array\_pop\_back()}}
+{\footnotesize\ttfamily void$\ast$ array\+\_\+pop\+\_\+back (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structarray}{array}} $\ast$}]{array }\end{DoxyParamCaption})}
+
+
+\begin{DoxyParams}{Parameters}
+{\em array} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{36 \{}
+\DoxyCodeLine{37     assert(\mbox{\hyperlink{structarray}{array}} != NULL \&\& \mbox{\hyperlink{structarray}{array}}-\/>size != 0);}
+\DoxyCodeLine{38     \textcolor{keywordflow}{return} \mbox{\hyperlink{structarray}{array}}-\/>data[-\/-\/\mbox{\hyperlink{structarray}{array}}-\/>size];}
+\DoxyCodeLine{39 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{array_8h_a14033c1f14af61127ff7167611596987}\label{array_8h_a14033c1f14af61127ff7167611596987}} 
+\index{array.h@{array.h}!array\_push\_back@{array\_push\_back}}
+\index{array\_push\_back@{array\_push\_back}!array.h@{array.h}}
+\doxysubsubsection{\texorpdfstring{array\_push\_back()}{array\_push\_back()}}
+{\footnotesize\ttfamily void array\+\_\+push\+\_\+back (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structarray}{array}} $\ast$}]{array,  }\item[{void $\ast$}]{value }\end{DoxyParamCaption})}
+
+
+\begin{DoxyParams}{Parameters}
+{\em array} & \\
+\hline
+{\em value} & \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{26 \{}
+\DoxyCodeLine{27     assert(\mbox{\hyperlink{structarray}{array}} != NULL);}
+\DoxyCodeLine{28     \textcolor{keywordflow}{if} (\mbox{\hyperlink{structarray}{array}}-\/>size == \mbox{\hyperlink{structarray}{array}}-\/>capacity) \{}
+\DoxyCodeLine{29         \mbox{\hyperlink{structarray}{array}}-\/>capacity = \mbox{\hyperlink{structarray}{array}}-\/>capacity == 0 ? 1 : 2 * \mbox{\hyperlink{structarray}{array}}-\/>capacity;}
+\DoxyCodeLine{30         \mbox{\hyperlink{structarray}{array}}-\/>data = realloc(\mbox{\hyperlink{structarray}{array}}-\/>data, \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{void} *) * \mbox{\hyperlink{structarray}{array}}-\/>capacity);}
+\DoxyCodeLine{31     \}}
+\DoxyCodeLine{32     \mbox{\hyperlink{structarray}{array}}-\/>data[\mbox{\hyperlink{structarray}{array}}-\/>size++] = value;}
+\DoxyCodeLine{33 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{array_8h_a989fb85dde301bae8352bc49c7cd3771}\label{array_8h_a989fb85dde301bae8352bc49c7cd3771}} 
+\index{array.h@{array.h}!array\_size@{array\_size}}
+\index{array\_size@{array\_size}!array.h@{array.h}}
+\doxysubsubsection{\texorpdfstring{array\_size()}{array\_size()}}
+{\footnotesize\ttfamily size\+\_\+t array\+\_\+size (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structarray}{array}} $\ast$}]{array }\end{DoxyParamCaption})}
+
+
+\begin{DoxyParams}{Parameters}
+{\em array} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{48 \{}
+\DoxyCodeLine{49     assert(\mbox{\hyperlink{structarray}{array}} != NULL);}
+\DoxyCodeLine{50     \textcolor{keywordflow}{return} \mbox{\hyperlink{structarray}{array}}-\/>size;}
+\DoxyCodeLine{51 \}}
+
+\end{DoxyCode}
