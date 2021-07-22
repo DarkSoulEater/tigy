@@ -1,7 +1,3 @@
-//
-// Created by eleno on 30.03.2021.
-//
-
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>

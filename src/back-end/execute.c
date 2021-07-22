@@ -1,7 +1,3 @@
-//
-// Created by Artyom Plevako on 31.03.2021.
-//
-
 #include "back-end/execute.h"
 #include "front-end/semantics/scope.h"
 #include "util/array.h"

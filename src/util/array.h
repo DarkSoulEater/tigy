@@ -1,7 +1,5 @@
-/**
- * \file
- * \brief
- */
+/// \file
+
 #ifndef TIGY_ARRAY_H
 #define TIGY_ARRAY_H
 
@@ -18,6 +16,7 @@ extern struct array *array_allocate(void);
  *
  * @param array
  * @param value
+ * @return
  */
 extern void array_push_back(struct array *array, void *value);
 

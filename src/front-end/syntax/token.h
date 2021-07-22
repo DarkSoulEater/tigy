@@ -1,7 +1,3 @@
-//
-// Created by Artyom Plevako on 25.02.2021.
-//
-
 #ifndef TIGY_TOKEN_H
 #define TIGY_TOKEN_H
 

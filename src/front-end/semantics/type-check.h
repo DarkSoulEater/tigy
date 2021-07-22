@@ -1,7 +1,3 @@
-//
-// Created by Artyom Plevako on 31.03.2021.
-//
-
 #ifndef TIGY_TYPE_CHECK_H
 #define TIGY_TYPE_CHECK_H
 

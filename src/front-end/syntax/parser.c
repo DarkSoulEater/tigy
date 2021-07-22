@@ -1,7 +1,3 @@
-//
-// Created by Artyom Plevako on 25.02.2021.
-//
-
 #include <assert.h>
 #include <stdbool.h>
 #include <stdlib.h>

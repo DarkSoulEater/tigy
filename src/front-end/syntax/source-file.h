@@ -1,7 +1,3 @@
-//
-// Created by Artyom Plevako on 22.03.2021.
-//
-
 #ifndef TIGY_SOURCE_FILE_H
 #define TIGY_SOURCE_FILE_H
 

@@ -1,7 +1,3 @@
-//
-// Created by Artyom Plevako on 30.03.2021.
-//
-
 #ifndef TIGY_PROGRAM_H
 #define TIGY_PROGRAM_H
 
