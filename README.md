@@ -1,5 +1,4 @@
 # Tigy - интерпретатор для учебного языка tiger
-Проект выполнен...
 
 ## Описание структуры проекта
 * doc - папка с [грамматикой языка](https://github.com/DarkSoulEater/tigy/blob/main/doc/grammar.txt) и документацией
@@ -13,3 +12,4 @@
 * [util](https://github.com/DarkSoulEater/tigy/tree/main/src/util) - папка с структурами данных (динамческий массив, хэш-таблица, стэк)
 
 ## Документация
+Документация сделана с помощью doxygen
